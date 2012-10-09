@@ -14,4 +14,7 @@ public interface Player {
      * @return move, in Glendinnings format.
      */
     public String next(Board b);
+
+	public String getName();
+	public void setName(String name);
 }

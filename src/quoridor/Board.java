@@ -12,5 +12,6 @@ public class Board {
     Wall[] whatever;
     
     public Board(int size) {
+    	
     }
 }
