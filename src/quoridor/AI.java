@@ -2,7 +2,20 @@ package quoridor;
 
 public class AI implements Player {
 	private String name;
-	
+	private int numWalls;
+	private Difficulty dif;
+	public int getNumWalls() {
+		return numWalls;
+	}
+	public void setNumWalls(int numWalls) {
+		this.numWalls = numWalls;
+	}
+	public Difficulty getDif() {
+		return dif;
+	}
+	public void setDif(Difficulty dif) {
+		this.dif = dif;
+	}
 	public String getName() {
 		return name;
 	}
@@ -10,8 +23,9 @@ public class AI implements Player {
 		this.name = name;
 	}
 	@Override
-	public String next(Board b) {
+	public String getMove() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

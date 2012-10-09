@@ -60,12 +60,14 @@ public class Main {
 
 		
 		game = new Board(size, players);// players);
-	}
-	
-	public void printBoard(Board b){
+		while(!game.finished()){
+			game.makeMove();
+			game.printState();
+		}
 		
+		String winner = game.getWinner();
+		System.out.println("The winner is " + winner);
 	}
-	
 	/**
 	 * @param string which is meant to be an int
 	 * @return false or true if correct parse
