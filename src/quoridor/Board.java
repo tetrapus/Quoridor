@@ -121,6 +121,7 @@ public class Board {
     public boolean validMove(Move m, Player p) {
         boolean validity = true;
         if (m.isWall()) {
+            System.out.println("firing");
             Box northwest = boxes[m.getRow()][m.getCol()];
             Box northeast = boxes[m.getRow()][m.getCol()+1];
             Box southwest = boxes[m.getRow()+1][m.getCol()];
@@ -229,11 +230,19 @@ public class Board {
     public void removeWall(Move position) {
         int row = position.getRow();
         int col = position.getCol();
-        boxes[row][col].setNeighbour(Direction.DOWN, boxes[row + 1][col]);
-        boxes[row + 1][col].setNeighbour(Direction.UP, boxes[row][col]);
-        boxes[row][col + 1].setNeighbour(Direction.DOWN,
-                boxes[row + 1][col + 1]);
-        boxes[row + 1][col + 1].setNeighbour(Direction.UP, boxes[row][col + 1]);
+        if (position.getOrientation() == Wall.Horizontal) {
+            boxes[row][col].setNeighbour(Direction.DOWN, boxes[row + 1][col]);
+            boxes[row + 1][col].setNeighbour(Direction.UP, boxes[row][col]);
+            boxes[row][col + 1].setNeighbour(Direction.DOWN,
+                    boxes[row + 1][col + 1]);
+            boxes[row + 1][col + 1].setNeighbour(Direction.UP, boxes[row][col + 1]);
+        } else {
+            boxes[row][col].setNeighbour(Direction.RIGHT, boxes[row + 1][col]);
+            boxes[row + 1][col].setNeighbour(Direction.RIGHT, boxes[row][col]);
+            boxes[row][col + 1].setNeighbour(Direction.LEFT,
+                    boxes[row + 1][col + 1]);
+            boxes[row + 1][col + 1].setNeighbour(Direction.LEFT, boxes[row][col + 1]);
+        }
         
     }
 }

@@ -174,7 +174,6 @@ public class Game {
         try {
             move = new Move(m);
         } catch (IllegalArgumentException e) {
-            System.out.println(historyPos);
             if ((m.equals("undo") && historyPos > 0) || (m.equals("redo") && historyPos < history.size())) {
                 return true;
             } else {
@@ -224,6 +223,7 @@ public class Game {
     	            curPlayer++;
     		    }
                 curPlayer = (curPlayer + players.length) % players.length;
+                System.out.println(curPlayer);
     		}
        	}
     }
