@@ -47,12 +47,16 @@ public class AI implements Player {
         Box[][] boxes = board.getBoxes();
         for (Box[] box: boxes){
         	for (Box b: box){
-        		if (b.getPlayer().getSymbol().equals(this.symbol)){
-        			current = b;
-        		}
+        		try {
+        			System.out.println(b.getPlayer().getSymbol() + this.symbol);
+	        		if (b.getPlayer().getSymbol().equals(this.symbol)){
+	        			current = b;
+	        		}
+        		} catch (NullPointerException n) {}
         	}
         }
 		boolean finished = false;
+		System.out.println(current);
 		q.add(current);
 		while(finished == false && q.size() != 0){
 			current =q.remove();

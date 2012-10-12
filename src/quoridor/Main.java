@@ -42,7 +42,7 @@ public class Main {
 				players[i - 1] = new Human();
 			} else {
 				while (!temp.equals("EASY") && !temp.equals("MEDIUM") && !temp.equals("HARD")){
-					System.out.println("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
+					System.out.print("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
 					temp = in.readLine();
 				}
 				Difficulty diff;
