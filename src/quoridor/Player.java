@@ -21,6 +21,6 @@ public interface Player {
 	public void setNumWalls(int numWalls);
 	public String getName();
 	public void setName(String name);
-	public String getMove();
+	public Move getMove(Game g);
 }
 

@@ -1,5 +1,5 @@
 package quoridor;
-
+import java.io.*;
 public class Human implements Player {
 	private String name;
 	private int numWalls;
@@ -34,7 +34,22 @@ public class Human implements Player {
 		this.numWalls = numWalls;
 	}
 	@Override
-	public String getMove() {
+	public Move getMove(Game g) {
+	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    System.out.println("Number of walls remaining for player " +
+	    		this.name + " is " + this.numWalls);
+	    while(true){
+	    	System.out.print("Enter the move for player " + this.symbol + ":");
+	    	String temp = in.readLine();
+		    try {
+		    	Move m = new Move(temp);
+		    	if (g.validMove(m, this)){
+		    		return m;
+		    	} else {
+		    		System.out.println("Invalid move!");
+		    	}
+		    } catch (IllegalArgumentException e) {}
+	    }
 		// TODO Auto-generated method stub
 		return null;
 	}

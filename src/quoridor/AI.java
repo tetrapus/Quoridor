@@ -34,7 +34,7 @@ public class AI implements Player {
 		this.dif = diff;
 	}
 	@Override
-	public String getMove() {
+	public Move getMove(Game g) {
 		// TODO Auto-generated method stub
 		
 		return null;
