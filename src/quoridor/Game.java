@@ -83,7 +83,7 @@ public class Game {
     }	
     
     private void undo() {
-        String command = history.remove();
+        String command = history.removeLast();
         future.add(command);
         Player p = players[(history.size()) % players.length];
         if (command.length() == 3) {
@@ -94,7 +94,7 @@ public class Game {
     }
 
     private void redo() {
-        String command = future.remove();
+        String command = future.removeLast();
         history.add(command);
         Player p = players[(history.size()-1) % players.length];
         if (command.length() == 3) {
