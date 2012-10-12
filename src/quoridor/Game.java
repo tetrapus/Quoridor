@@ -55,14 +55,14 @@ public class Game {
     	} else {
     		board.placeMove(move, p);
     	}
-    }
+    }	
     
     public Board getBoard(){
     	Board retval = new Board();
     	Integer count = 0;
     	Player[] fakePlayers = new Player[4];
     	for (Player current: players){
-    		Player[count] = new FakePlayer(current);
+    		fakePlayers[count] = new FakePlayer(current);
     		count++;
     	}
     	count = 0;
@@ -96,11 +96,11 @@ public class Game {
     			retval.placeMove(next, fakePlayers[count]);
     			count ++;
     		}
-    		if (count == fakePlayers.length)){
+    		if (count == fakePlayers.length){
     			count = 0;
     		}
     	}
-    	return this.board.;
+    	return retval;
     }
     /**Checks each players position and returns a boolean 
      * 
