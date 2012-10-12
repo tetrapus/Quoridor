@@ -6,7 +6,7 @@ import java.util.Hashtable;
 
 public class Game {
 	
-    LinkedList<Move> history;
+    LinkedList<Move> history = new LinkedList<Move>();
     Board board = new Board();
     Player[] players;
     Dictionary<Player, Integer> wallCount = new Hashtable<Player, Integer>();

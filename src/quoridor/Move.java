@@ -63,7 +63,7 @@ public class Move {
         } else if (move.length() > 3) {
             return false;
         }
-        return true;
+        return validity;
     }
     
     public boolean isWall() {
