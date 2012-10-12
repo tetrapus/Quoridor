@@ -1,14 +1,23 @@
 package quoridor;
 
 import java.util.LinkedList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class Game {
+	
     LinkedList<Move> history;
     Board board = new Board();
     Player[] players;
+    Dictionary<Player, Integer> wallCount = new Hashtable<Player, Integer>();
     public Game(Player[] players) {
     	Integer count = 0;
     	for (Player current: players){
+    		if (players.length == 4){
+    			wallCount.put(current,  new Integer(5));
+    		} else {
+    			wallCount.put(current,  new Integer(10));
+    		}
     		count ++;
     		current.setSymbol(count.toString());
     	}
@@ -27,31 +36,69 @@ public class Game {
         this.players = players;
     }
     
-    public void makeMove(){
-    	
-    }
-    
     public void printState(){
     	
     }
     
+    public void makeMove(Move move, Player p){
+    	if (move.isWall()){
+    		board.placeWall(move);
+    		int walls = wallCount.get(p);
+    		wallCount.put(p, walls - 1);
+    	} else {
+    		
+    	}
+    }
+    /**Checks each players position and returns a boolean 
+     * 
+     * @return true if game over false if not over
+     */
     public boolean finished(){
     	boolean finished = false;
     	for (Player current: players){
-    		//board.getPositionOf(current);
-    		
+    		Move position = board.positionOf(current);
+    		if (current.getEnd() == Direction.UP){
+    			return position.getRow() == 0;
+    		} else if (current.getEnd() == Direction.DOWN){
+    			return position.getRow() == 8;
+    		} else if (current.getEnd() == Direction.LEFT){
+    			return position.getCol() == 0;
+    		} else if (current.getEnd() == Direction.RIGHT){
+    			return position.getCol() == 8;
+    		}
     	}
     	return finished;
     }
-    
+    public boolean validMove(Move m, Player p){
+    	if (m.isWall()){
+    		if (wallCount.get(p) != 0){
+    			if (board.validMove(m, p)){
+    				return true;
+    			}
+    		}
+    	} else {
+    		if (board.validMove(m, p)){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
     public Player getWinner(){
     	Player winner = null;
     	return winner;
     }
     
     public void play(){
+    	Integer curPlayer = 0;
     	while (!finished()){
-    		makeMove();
+    		Move next = players[curPlayer].getMove(this);
+    		if (validMove(next, players[curPlayer])){
+    			makeMove(next, players[curPlayer]);
+    		}
+    		curPlayer++;
+    		if (curPlayer == players.length){
+    			curPlayer = 0;
+    		}
     		printState();
     	}
     }

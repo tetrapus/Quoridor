@@ -33,6 +33,7 @@ public class Main {
 		players = new Player[size];
 		
 		for (Integer i = 1; i<= size; i++){
+			temp = "";
 			while (!temp.equals("H") && !temp.equals("AI")){
 				System.out.print("Enter the type of player " + i.toString() + " human or AI(H/AI): ");
 				temp = in.readLine();
