@@ -1,6 +1,9 @@
 
 package quoridor;
 
+
+import java.util.LinkedList;
+import java.util.Queue;
 import quoridor.Move.Wall;
 
 
@@ -13,7 +16,7 @@ import quoridor.Move.Wall;
 public class Board {
     
     private final int size = 9;
-    private Box[][]  boxes;
+    private Box[][]   boxes;
     
     public Board() {
         boxes = new Box[size][size];
@@ -49,8 +52,8 @@ public class Board {
     
     public void printBoard() {
         System.out.println(" [4m a b c d e f g h i [24m");
-        for (int i=0; i<boxes.length; i++) {
-            System.out.print(i);
+        for (int i = 0; i < boxes.length; i++) {
+            System.out.print(i+1);
             System.out.print("[4m|");
             for (Box cell : boxes[i]) {
                 String cellname;
@@ -59,24 +62,24 @@ public class Board {
                 } else {
                     cellname = cell.getPlayer().getSymbol();
                 }
-                if (cell.getNeighbour(Direction.DOWN) == null && i != 8) {
+                if (cell.getNeighbour(Direction.DOWN) != null || i == 8) {
                     cellname = "[24m" + cellname + "[4m";
                 }
-                if (cell.getNeighbour(Direction.RIGHT) != null) {
+                if (cell.getNeighbour(Direction.RIGHT) == null) {
                     cellname += "|";
+                } else {
+                    cellname += " ";
                 }
                 System.out.print(cellname);
             }
-            System.out.println("|[24m");
+            System.out.println("[24m");
         }
     }
     
     public Move positionOf(Player p) {
-        for (int i=0; i<boxes.length; i++) {
-            for (int j=0; j<boxes[i].length; j++){
-                if (boxes[i][j].getPlayer() == p) {
-                    return new Move(i, j);
-                }
+        for (int i = 0; i < boxes.length; i++) {
+            for (int j = 0; j < boxes[i].length; j++) {
+                if (boxes[i][j].getPlayer() == p) { return new Move(i, j); }
             }
         }
         return null;
@@ -88,6 +91,67 @@ public class Board {
     
     public int getDistanceToEnd(Move location) {
         return 0;
+    }
+    
+    public boolean flood() {
+        LinkedList<Box> visited = new LinkedList<Box>();
+        Queue<Box> q = new LinkedList<Box>();
+        q.add(boxes[0][0]);
+        Box current;
+        Box temp;
+        while (!q.isEmpty()) {
+            current = q.remove();
+            for (Direction dir : Direction.values()) {
+                temp = current.getNeighbour(dir);
+                if (temp != null && !visited.contains(temp)) {
+                    visited.add(temp);
+                    q.add(temp);
+                }
+            }
+        }
+        return visited.size() == size*size;
+    }
+    
+    
+    public boolean validMove(Move m, Player p) {
+        boolean validity = true;
+        if (m.isWall()) {
+            if (m.getOrientation() == Wall.Vertical && m.getRow() < size - 1) {
+                validity = validity && boxes[m.getRow()][m.getCol()].getNeighbour(Direction.RIGHT) != null;
+                validity = validity && boxes[m.getRow()+1][m.getCol()].getNeighbour(Direction.RIGHT) != null;
+            } else if (m.getOrientation() == Wall.Horizontal && m.getCol() < size - 1) {
+                validity = validity && boxes[m.getRow()][m.getCol()].getNeighbour(Direction.DOWN) != null;
+                validity = validity && boxes[m.getRow()][m.getCol()+1].getNeighbour(Direction.DOWN) != null;
+            } else {
+                validity = false;
+            }
+        } else {
+            Move pm = positionOf(p);
+            int rowdiff = m.getRow() - pm.getRow();
+            int coldiff = m.getCol() - pm.getCol();
+            validity = validity
+                       && (Math.abs(rowdiff) == 1
+                           ^ Math.abs(coldiff) == 1);
+            Direction movement;
+            if (rowdiff == 1) {
+                movement = Direction.DOWN;
+            } else if (rowdiff == -1) {
+                movement = Direction.UP;
+            } else if (coldiff == 1) {
+                movement = Direction.RIGHT;
+            } else {
+                movement = Direction.LEFT;
+            }
+            Box b = boxes[pm.getRow()][pm.getCol()];
+            
+            while (b != null && b.getPlayer() != null) {
+                b = b.getNeighbour(movement);
+                if (b == null) {
+                    validity = false;
+                }
+            }
+        }
+        return validity;
     }
     
     public boolean placeWall(Move position) throws IllegalStateException {
@@ -141,10 +205,11 @@ public class Board {
     public void removeWall(Move position) {
         int row = position.getRow();
         int col = position.getCol();
-        boxes[row][col].setNeighbour(Direction.DOWN, boxes[row+1][col]);
-        boxes[row+1][col].setNeighbour(Direction.UP, boxes[row][col]);
-        boxes[row][col+1].setNeighbour(Direction.DOWN, boxes[row+1][col+1]);
-        boxes[row+1][col+1].setNeighbour(Direction.UP, boxes[row][col+1]);
-
+        boxes[row][col].setNeighbour(Direction.DOWN, boxes[row + 1][col]);
+        boxes[row + 1][col].setNeighbour(Direction.UP, boxes[row][col]);
+        boxes[row][col + 1].setNeighbour(Direction.DOWN,
+                boxes[row + 1][col + 1]);
+        boxes[row + 1][col + 1].setNeighbour(Direction.UP, boxes[row][col + 1]);
+        
     }
 }

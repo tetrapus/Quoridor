@@ -14,7 +14,7 @@ public class Move {
             throw new IllegalArgumentException("Invalid move string.");
         }
         this.row = move.charAt(0) - 'a';
-        this.col = move.charAt(1) - '0';
+        this.col = move.charAt(1) - '1';
         this.isWall = false;
         if (move.length() == 3) {
             this.isWall = true;
@@ -25,7 +25,7 @@ public class Move {
     public Move(int row, int col) {
         char rowMove = 'a';
         rowMove += row;
-        char colMove = '0';
+        char colMove = '1';
         colMove += col;
         if (!isValidMoveString(String.valueOf(rowMove) + String.valueOf(colMove))) {
             throw new IllegalArgumentException("Invalid move.");
