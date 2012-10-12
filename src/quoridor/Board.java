@@ -18,6 +18,10 @@ public class Board {
     private final int size = 9;
     private Box[][]   boxes;
     
+    public Box[][] getBoxes() {
+        return boxes;
+    }
+
     public Board() {
         boxes = new Box[size][size];
         // Make the boxes
@@ -142,15 +146,13 @@ public class Board {
             Queue<Box> q = new LinkedList<Box>();
             q.add(boxes[pm.getRow()][pm.getCol()]);
             Box current;
-            Box temp;
+            Box neighbour;
             while (!q.isEmpty()) {
                 current = q.remove();
                 for (Direction dir : Direction.values()) {
-                    temp = current.getNeighbour(dir);
-                    if (temp != null && !visited.contains(temp)) {
-                        visited.add(temp);
-                        q.add(temp);
-                    }
+                    neighbour = current.getNeighbour(dir);
+                    //if (false)
+                    //adjacent.add()
                 }
             }
         }
