@@ -9,11 +9,19 @@ package quoridor;
 public class Box {
     int row;
     int col;
-    
+    Box parent = null;
     // TODO: private/public problems
 
     Player contents;
-    Box[] adjacent;
+    public Box getParent() {
+		return parent;
+	}
+
+	public void setParent(Box parent) {
+		this.parent = parent;
+	}
+
+	Box[] adjacent;
     
     public Box(int row, int col) {
         this.row = row;

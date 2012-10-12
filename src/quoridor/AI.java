@@ -2,9 +2,6 @@ package quoridor;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import lab10.Board;
-import lab10.BoardOperator;
-import lab10.Direction;
 public class AI implements Player {
 	private String name;
 	private int numWalls;
@@ -40,64 +37,74 @@ public class AI implements Player {
 	}
 	
 	public Move getMoveEasy(Game g){
-		Move next = null;
-		
-		return next;
+		return getShortestPath(g);
 	}
 	
 	public Move getShortestPath(Game g){
-		Move next = null;
+		FakePlayer fake = new FakePlayer(this);
         Queue<Box> q = new LinkedList<Box>();
         Board board = g.getBoard();
-        
-		Queue<Board> toSearch = new LinkedList<Board> ();
-		BoardOperator b = new BoardOperator();
-		Board startB = new Board(start);
-		Board endB = new Board(goal);
-		Board current = startB;
-		b.printBoard(current);
-		int count = 0;
+        Move startPos = board.positionOf(fake);
+        Box[][] boxes = board.getBoxes();
+        Box start = boxes[startPos.getRow()][startPos.getCol()];
+		Box current = start;
 		boolean finished = false;
-		toSearch.add(current);
-		if (b.solveable(startB, endB)){
-			if (!b.equals(current, endB)){
-				while(finished == false && toSearch.size() != 0 && current.movSeq.size() != maxMoves){
-					current = toSearch.remove();
-					Board next = null;
-					for (Direction i: Direction.values()){
-						next = b.moveBoard(current, i);
-						if (next != null){
-							next.setParent(current);
-							if (!b.checkIfVisited(next)){
-								toSearch.add(next);
-								count ++;
-								if (b.equals(next, endB)){
-									finished = true;
-									current = next;
-								}
-							} else {
-								next = null;
-							}
+		q.add(current);
+		while(finished == false && q.size() != 0){
+			current =q.remove();
+			Box next = null;
+			for (Direction i: Direction.values()){
+				next = current.getNeighbour(i);
+				if (next != null){
+					next.setParent(current);
+					if (!checkIfVisited(next)){
+						q.add(next);
+						if (finished(next)){
+							finished = true;
+							current = next;
 						}
+					} else {
+						next = null;
 					}
-				} 
-				if (current.movSeq.size() == maxMoves){
-					System.out.println("Max moves hit stopping search");
 				}
 			}
-			System.out.println(current.movSeq.toString());
-			System.out.println("Solveable");
-		} else {
-			System.out.println("Puzzle is not solvable");
+		} 
+		Move last = null;
+		while(current.getParent() != null){
+
+			System.out.println("(" + current.row + "," + current.col + ") ");
+			last = new Move(current.row, current.col);
+			current = current.getParent();
 		}
 		// TODO Auto-generated method stub
-		return null;
+		return last;
 	}
 	
-	BreadthFirst(int size){
-		this.size = size;
+	public boolean finished(Box b){
+		if (this.end == Direction.UP){
+			return b.row == 0;
+		} else if (this.end == Direction.DOWN){
+			return b.row == 8;
+		} else if (this.end == Direction.LEFT){
+			return b.col == 0;
+		} else if (this.end == Direction.RIGHT){
+			return b.col == 8;
+		}
+		return false;
 	}
-		return next;
+	
+	public boolean checkIfVisited(Box b){
+		boolean retval = false;
+		Box parent = b.parent;
+		while(!retval && parent!=null){
+			retval = equals(b, parent);
+			parent =  parent.parent;
+		}
+		return retval;
+	}
+	
+	public boolean equals(Box a, Box b){
+		return a.row == b.row && b.col == a.col;
 	}
 	
 	public Move getMoveNormal(Game g){
@@ -111,13 +118,13 @@ public class AI implements Player {
 	}
 	
 	@Override
-	public Move getMove(Game g) {
+	public String getMove(Game g) {
 		if (this.dif == Difficulty.Easy){
-			return getMoveEasy(g);
+			return getMoveEasy(g).toString();
 		} else if (this.dif == Difficulty.Normal) {
-			return getMoveNormal(g);
+			return getMoveNormal(g).toString();
 		} else {
-			return getMoveHard(g);
+			return getMoveHard(g).toString();
 		}
 		// TODO Auto-generated method stub
 		
