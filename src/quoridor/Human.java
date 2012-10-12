@@ -34,7 +34,7 @@ public class Human implements Player {
 		this.numWalls = numWalls;
 	}
 	@Override
-	public Move getMove(Game g){
+	public String getMove(Game g){
 	    String temp = "";
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		g.printState();
@@ -42,9 +42,8 @@ public class Human implements Player {
 	    	System.out.print("Enter the move for player " + this.symbol + ":");
 	    	try {temp = in.readLine();} catch(IOException e) {}
 		    try {
-		    	Move m = new Move(temp);
-		    	if (g.validMove(m, this)){
-		    		return m;
+		    	if (g.validMove(temp, this)){
+		    		return temp;
 		    	} else {
 		    		System.out.println("Invalid move!");
 		    	}

@@ -9,6 +9,21 @@ public class Move {
     private boolean isWall;
     private Wall orientation;
     
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        char row = '1';
+        row += this.row;
+        char col = 'a';
+        col += this.col;
+        s.append(col);
+        s.append(row);
+        if (isWall()) {
+            s.append(this.orientation == Wall.Vertical ? 'v' : 'h');
+        }
+        return s.toString();
+    }
+    
     public Move(String move) throws IllegalArgumentException {
         if (!isValidMoveString(move)) {
             throw new IllegalArgumentException("Invalid move string.");
