@@ -82,6 +82,10 @@ public class Game {
     	}
     }	
     
+    private void undo() {
+    }
+    
+    
     public Board getBoard(){
     	Board retval = new Board();
     	Integer count = 0;
@@ -91,23 +95,10 @@ public class Game {
     		count++;
     	}
     	count = 0;
-    	for (Player current: fakePlayers){
-    		if (fakePlayers.length == 4){
-    			current.setNumWalls(5);
-    		} else {
-    			current.setNumWalls(10);
-    		}
-    		count ++;
-    		current.setSymbol(count.toString());
-    	}
-    	fakePlayers[0].setEnd(Direction.DOWN);
 		board.addPlayer(new Move(0, 4), fakePlayers[0]);
-		fakePlayers[1].setEnd(Direction.UP);
 		board.addPlayer(new Move(8, 4), fakePlayers[1]);
     	if (fakePlayers.length == 4){
-    		fakePlayers[2].setEnd(Direction.RIGHT);
     		board.addPlayer(new Move(4, 0), fakePlayers[2]);
-    		fakePlayers[3].setEnd(Direction.LEFT);
     		board.addPlayer(new Move(4, 8), fakePlayers[3]);
     	}
     	count = 0;
@@ -203,7 +194,8 @@ public class Game {
     	while (!finished()){
     		String next = players[curPlayer].getMove(this);
     		if (validMove(next, players[curPlayer])){
-    		    if (next == "undo" || next == "redo") {
+    		    if (next == "undo") {
+    		    } else if (next == "redo") {
     		        
     		    } else {
     		        makeMove(new Move(next), players[curPlayer]);

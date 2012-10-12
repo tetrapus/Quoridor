@@ -126,9 +126,6 @@ public class AI implements Player {
 		} else {
 			return getMoveHard(g).toString();
 		}
-		// TODO Auto-generated method stub
-		
-		return null;
 	}
 	@Override
 	public String getSymbol() {
