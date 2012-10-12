@@ -20,17 +20,17 @@ public class Main {
 		System.out.println("Writen by Luke Pearson and Joseph Tuong");
 		String temp = "";
 		Integer size =0;
-		Player[] players = new Player[4];
-		while(size < 2 || size > 4	){
+		Player[] players;
+		while(size != 2 && size != 4	){
 			temp = "";
 			while(!tryParseInt(temp)){
-				System.out.print("Enter the number of players: ");
+				System.out.print("Enter the number of players(2/4): ");
 				temp = in.readLine();
 			}
 
 			size = Integer.parseInt(temp);
 		}
-		
+		players = new Player[size];
 		
 		for (Integer i = 1; i<= size; i++){
 			while (!temp.equals("H") && !temp.equals("AI")){

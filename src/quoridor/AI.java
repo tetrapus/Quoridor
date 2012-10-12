@@ -5,6 +5,13 @@ public class AI implements Player {
 	private int numWalls;
 	private Difficulty dif;
 	private String symbol;
+	private Direction end;
+	public Direction getEnd() {
+		return end;
+	}
+	public void setEnd(Direction end) {
+		this.end = end;
+	}
 	public int getNumWalls() {
 		return numWalls;
 	}

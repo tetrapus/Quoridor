@@ -7,12 +7,14 @@ package quoridor;
  * @author Luke Pearson
  */
 public interface Player {
-
+	
     /**
      * Generates the next move made by the player.
      * @param b current game state
      * @return move, in Glendinnings format.
      */
+	public Direction getEnd();
+	public void setEnd(Direction end);
 	public String getSymbol();
 	public void setSymbol(String symbol);
 	public int getNumWalls();

@@ -4,6 +4,13 @@ public class Human implements Player {
 	private String name;
 	private int numWalls;
 	private String symbol;
+	private Direction end;
+	public Direction getEnd() {
+		return end;
+	}
+	public void setEnd(Direction end) {
+		this.end = end;
+	}
 	public String getSymbol() {
 		return symbol;
 	}
