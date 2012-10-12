@@ -1,6 +1,8 @@
 
 package quoridor;
 
+import quoridor.Move.Wall;
+
 
 /**
  * Represents a game of Quoridor.
@@ -10,12 +12,11 @@ package quoridor;
  */
 public class Board {
     
-    Player[] players;
-    Box[][]  boxes;
+    private final int size = 9;
+    private Player[] players;
+    private Box[][]  boxes;
     
-    public Board(int size, Player[] players) {
-        this.players = players;
-        assert !(size % 2 == 1);
+    public Board() {
         boxes = new Box[size][size];
         // Make the boxes
         
@@ -51,33 +52,38 @@ public class Board {
         
     }
     
-    public int getDistanceToEnd(int row, int col) {
+    public void printBoard() {
+        System.out.println("  a  b  c  d  e  f  g  h  i  ");
+        System.out.println(" ");
+        for (Box[] row : boxes) {
+            for (Box cell : row) {
+                
+            }
+        }
+    }
+    
+    public void addPlayer(Move m, Player p) {
+        boxes[m.getRow()][m.getCol()].setPlayer(p);
+    }
+    
+    public int getDistanceToEnd(Move location) {
         return 0;
     }
     
-    public boolean isLegalMove(String move) {
-        return true;
-    }
-    
-    public boolean placeWall(String position) throws IllegalArgumentException {
+    public boolean placeWall(Move position) throws IllegalStateException {
         // TODO: Make neater
-        // Fix absolute compass position variable names
-        int row = position.charAt(0) - 'a';
-        int col = position.charAt(1) - '0';
         // The position specified is the northwest corner of the wall.
         Direction otherside;
         Direction othersquare;
         Direction thisside;
-        if (position.charAt(2) == 'h') {
+        if (position.getOrientation() == Wall.Horizontal) {
             otherside = Direction.DOWN;
             thisside = Direction.UP;
             othersquare = Direction.RIGHT;
-        } else if (position.charAt(2) == 'v') {
+        } else {
             otherside = Direction.RIGHT;
             thisside = Direction.LEFT;
             othersquare = Direction.DOWN;
-        } else {
-            throw new IllegalArgumentException("Invalid move string.");
         }
         
         try {
@@ -85,7 +91,7 @@ public class Board {
              * The following fails iff a wall exists between the northwest and
              * southwest walls.
              */
-            Box northwest = boxes[row][col];
+            Box northwest = boxes[position.getRow()][position.getCol()];
             Box southwest = northwest.getNeighbour(otherside);
             Box southeast = southwest.getNeighbour(othersquare);
             Box northeast = northwest.getNeighbour(othersquare);
@@ -110,5 +116,15 @@ public class Board {
             return false;
         }
         return true;
+    }
+    
+    public void removeWall(Move position) {
+        int row = position.getRow();
+        int col = position.getCol();
+        boxes[row][col].setNeighbour(Direction.DOWN, boxes[row+1][col]);
+        boxes[row+1][col].setNeighbour(Direction.UP, boxes[row][col]);
+        boxes[row][col+1].setNeighbour(Direction.DOWN, boxes[row+1][col+1]);
+        boxes[row+1][col+1].setNeighbour(Direction.UP, boxes[row][col+1]);
+
     }
 }
