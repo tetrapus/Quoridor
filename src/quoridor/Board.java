@@ -66,13 +66,15 @@ public class Board {
                 } else {
                     cellname = cell.getPlayer().getSymbol();
                 }
-                if (cell.getNeighbour(Direction.DOWN) != null || i == 8) {
-                    cellname = "[24m" + cellname + "[4m";
+                if (cell.getNeighbour(Direction.DOWN) != null && i != 8) {
+                    cellname = "[24m" + cellname;
+                } else {
+                    cellname = "[4m" + cellname;
                 }
                 if (cell.getNeighbour(Direction.RIGHT) == null) {
                     cellname += "|";
                 } else {
-                    cellname += " ";
+                    cellname += ".";
                 }
                 System.out.print(cellname);
             }
