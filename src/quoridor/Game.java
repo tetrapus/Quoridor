@@ -32,7 +32,6 @@ public class Game {
     		board.addPlayer(new Move(4, 8), players[3]);
     	}
     	board.printBoard();
-        board = new Board();
         this.players = players;
     }
     

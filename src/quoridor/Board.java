@@ -78,9 +78,8 @@ public class Board {
     
     public Move positionOf(Player p) {
         for (int i = 0; i < boxes.length; i++) {
-            for (int j = 0; j < boxes[i].length; j++) {
-                if (boxes[i][j].getPlayer() == p) { return new Move(i, j); }
-            }
+            for (int j = 0; j < boxes.length; j++) {
+                if (p.equals(boxes[i][j].getPlayer())) { return new Move(i, j); }            }
         }
         return null;
     }
