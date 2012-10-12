@@ -13,7 +13,6 @@ import quoridor.Move.Wall;
 public class Board {
     
     private final int size = 9;
-    private Player[] players;
     private Box[][]  boxes;
     
     public Board() {
@@ -46,20 +45,41 @@ public class Board {
                 boxes[i][j].setNeighbour(Direction.RIGHT, boxes[i][j + 1]);
             }
         }
-        
-        boxes[0][size / 2].setPlayer(players[0]);
-        boxes[size - 1][size / 2].setPlayer(players[1]);
-        
     }
     
     public void printBoard() {
-        System.out.println("  a  b  c  d  e  f  g  h  i  ");
-        System.out.println(" ");
-        for (Box[] row : boxes) {
-            for (Box cell : row) {
-                
+        System.out.println(" [4m a  b  c  d  e  f  g  h  i [24m");
+        for (int i=0; i<boxes.length; i++) {
+            System.out.print(i);
+            System.out.print("[4m|");
+            for (Box cell : boxes[i]) {
+                String cellname;
+                if (cell.getPlayer() == null) {
+                    cellname = " ";
+                } else {
+                    cellname = cell.getPlayer().getSymbol();
+                }
+                if (cell.getNeighbour(Direction.DOWN) != null) {
+                    cellname = "[24m" + cellname + "[4m";
+                }
+                if (cell.getNeighbour(Direction.RIGHT) == null) {
+                    cellname += "|";
+                }
+                System.out.print(cellname);
+            }
+            System.out.println("|[24m");
+        }
+    }
+    
+    public Move positionOf(Player p) {
+        for (int i=0; i<boxes.length; i++) {
+            for (int j=0; j<boxes[i].length; j++){
+                if (boxes[i][j].getPlayer() == p) {
+                    return new Move(i, j);
+                }
             }
         }
+        return null;
     }
     
     public void addPlayer(Move m, Player p) {

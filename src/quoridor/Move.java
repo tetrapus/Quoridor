@@ -21,6 +21,19 @@ public class Move {
             this.orientation = move.charAt(2) == 'h' ? Wall.Horizontal : Wall.Vertical;
         }
     }
+    
+    public Move(int row, int col) {
+        char rowMove = 'a';
+        rowMove += row;
+        char colMove = '0';
+        colMove += col;
+        if (!isValidMoveString(String.valueOf(rowMove) + String.valueOf(colMove))) {
+            throw new IllegalArgumentException("Invalid move.");
+        }
+        this.row = row;
+        this.col = col;
+        this.isWall = false;
+    }
 
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);

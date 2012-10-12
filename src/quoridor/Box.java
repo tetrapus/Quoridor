@@ -29,4 +29,8 @@ public class Box {
     public void setPlayer(Player p) {
         this.contents = p;
     }
+    
+    public Player getPlayer() {
+        return this.contents;
+    }
 }
