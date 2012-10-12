@@ -49,6 +49,7 @@ public class AI implements Player {
 		Move next = null;
         Queue<Box> q = new LinkedList<Box>();
         Board board = g.getBoard();
+        
 		Queue<Board> toSearch = new LinkedList<Board> ();
 		BoardOperator b = new BoardOperator();
 		Board startB = new Board(start);
