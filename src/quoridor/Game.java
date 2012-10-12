@@ -3,7 +3,7 @@ package quoridor;
 import java.util.LinkedList;
 import java.util.Dictionary;
 import java.util.Hashtable;
-
+import java.util.List;
 public class Game {
 	
     LinkedList<Move> history = new LinkedList<Move>();
@@ -49,14 +49,33 @@ public class Game {
     	board.printBoard();
     }
     
+    public boolean checkList(List<String> moves){
+    	int count = 0;
+    	for (String move: moves){
+    		Move m = new Move(move);
+    		if (validMove(m, players[count])){
+    			makeMove(m, players[count]);
+    		} else {
+    			return false;
+    		}
+    		count ++;
+    		if (count == players.length){
+    			count = 0;
+    		}	
+    	}
+    	return true;
+    }
+    
     private void makeMove(Move move, Player p){
-    	history.add(move);
+    	
     	if (move.isWall()){
+    		history.add(move);
     		board.placeWall(move);
     		int walls = wallCount[Integer.parseInt(p.getSymbol())];
     		wallCount[Integer.parseInt(p.getSymbol())] = walls - 1;
     		p.setNumWalls(walls - 1);
     	} else {
+    		history.add(board.positionOf(p));
     		board.placeMove(move, p);
     	}
     }	

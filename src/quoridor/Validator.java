@@ -9,9 +9,14 @@ public class Validator {
     
     // you may add extra fields and methods to this class
     // but the ProvidedTests code only calls the specified methods
-    
+    Player[] ar = new Player[2];
+
+	Game game;
     public Validator() {
         // TODO
+        ar[0] = new Human();
+        ar[1] = new Human();
+        game = new Game(ar);
     }
 
     /**
@@ -26,7 +31,7 @@ public class Validator {
      */
     public boolean check(List<String> moves) {
         // TODO
-        return false;
+        return game.checkList(moves);
     }
 
 }

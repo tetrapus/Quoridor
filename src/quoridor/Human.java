@@ -48,7 +48,8 @@ public class Human implements Player {
 		    	} else {
 		    		System.out.println("Invalid move!");
 		    	}
-		    } catch (IllegalArgumentException e) {}
+		    } catch (IllegalArgumentException e) {
+		    }
 	    }
 		// TODO Auto-generated method stub
 	}
