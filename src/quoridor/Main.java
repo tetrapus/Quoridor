@@ -66,7 +66,7 @@ public class Main {
 			}
 			size = Integer.parseInt(temp);
 		}
-		game = new Board(size, players);// players);
+		game = new Game(size, players);// players);
 		while(!game.finished()){
 			game.makeMove();
 			game.printState();
