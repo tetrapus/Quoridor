@@ -23,6 +23,6 @@ public interface Player {
 	public void setNumWalls(int numWalls);
 	public String getName();
 	public void setName(String name);
-	public Move getMove(Game g)throws IOException;
+	public Move getMove(Game g);
 }
 
