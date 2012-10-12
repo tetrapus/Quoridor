@@ -63,7 +63,7 @@ public class AI implements Player {
 			Box next = null;
 			for (Direction i: Direction.values()){
 				next = current.getNeighbour(i);
-				if (next != null){
+				if (next != null && next.getPlayer() == null) {
 					//System.out.println("(" +next.row + ", "+next.col + ")");
 					if (!visited.contains(next)){
 						next.setParent(current);
@@ -75,8 +75,8 @@ public class AI implements Player {
 						}
 					} else {
 						next = null;
-					}
-				}
+				    }
+				}				
 			}
 		} 
 		Move last = null;

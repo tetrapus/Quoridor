@@ -25,10 +25,10 @@ public class Game {
     		count ++;
     		current.setSymbol(count.toString());
     	}
-		players[0].setEnd(Direction.DOWN);
-		board.addPlayer(new Move(0, 4), players[0]);
-		players[1].setEnd(Direction.UP);
-		board.addPlayer(new Move(8, 4), players[1]);
+		players[0].setEnd(Direction.UP);
+		board.addPlayer(new Move(8, 4), players[0]);
+		players[1].setEnd(Direction.DOWN);
+		board.addPlayer(new Move(0, 4), players[1]);
     	if (players.length == 4){
     		players[2].setEnd(Direction.RIGHT);
     		board.addPlayer(new Move(4, 0), players[2]);
@@ -114,8 +114,8 @@ public class Game {
     		count++;
     	}
     	count = 0;
-    	retval.addPlayer(new Move(0, 4), fakePlayers[0]);
-    	retval.addPlayer(new Move(8, 4), fakePlayers[1]);
+    	retval.addPlayer(new Move(8, 4), fakePlayers[0]);
+    	retval.addPlayer(new Move(0, 4), fakePlayers[1]);
     	if (fakePlayers.length == 4){
     		retval.addPlayer(new Move(4, 0), fakePlayers[2]);
     		retval.addPlayer(new Move(4, 8), fakePlayers[3]);

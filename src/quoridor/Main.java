@@ -17,6 +17,7 @@ public class Main {
 	public static void main (String[] argv) throws IOException{ 
 	     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Welcome to a java implementation of Quoridor");
+		System.out.println("YOU CANNOT PUT A FENCE AT A9H");
 		System.out.println("Writen by Luke Pearson and Joseph Tuong");
 		String temp = "";
 		Integer size =0;
@@ -41,7 +42,7 @@ public class Main {
 			if (temp.toLowerCase().matches("h(uman)?")){
 				players[i - 1] = new Human();
 			} else {
-				while (!temp.toLowerCase().matches("(e(asy)?|m(edium)?|h(ard)?")){
+				while (!temp.toLowerCase().matches("(e(asy)?|m(edium)?|h(ard)?)")){
 					System.out.print("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
 					temp = in.readLine();
 				}
@@ -63,6 +64,7 @@ public class Main {
 		
 		game.play();
 		System.out.println("Player "+ game.getWinner().getName() + " wins!");
+		game.printState();
 		//String winner = game.getWinner();
 		//System.out.println("The winner is " + winner);
 	}
