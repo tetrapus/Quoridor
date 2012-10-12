@@ -40,7 +40,7 @@ public class Board {
                 boxes[i][j].setNeighbour(Direction.LEFT, boxes[i][j - 1]);
             }
         }
-        for (int i = 0; i < boxes.length - 1; i++) {
+        for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes.length - 1; j++) {
                 boxes[i][j].setNeighbour(Direction.RIGHT, boxes[i][j + 1]);
             }
@@ -48,7 +48,7 @@ public class Board {
     }
     
     public void printBoard() {
-        System.out.println(" [4m a  b  c  d  e  f  g  h  i [24m");
+        System.out.println(" [4m a b c d e f g h i [24m");
         for (int i=0; i<boxes.length; i++) {
             System.out.print(i);
             System.out.print("[4m|");
@@ -59,10 +59,10 @@ public class Board {
                 } else {
                     cellname = cell.getPlayer().getSymbol();
                 }
-                if (cell.getNeighbour(Direction.DOWN) != null) {
+                if (cell.getNeighbour(Direction.DOWN) == null && i != 8) {
                     cellname = "[24m" + cellname + "[4m";
                 }
-                if (cell.getNeighbour(Direction.RIGHT) == null) {
+                if (cell.getNeighbour(Direction.RIGHT) != null) {
                     cellname += "|";
                 }
                 System.out.print(cellname);
