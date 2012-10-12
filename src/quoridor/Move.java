@@ -24,7 +24,7 @@ public class Move {
 
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);
-        validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'z';
+        validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'j';
         if (move.length() == 3) {
             validity = validity && (move.charAt(2) == 'v' ||  move.charAt(2) == 'h'); 
         } else if (move.length() > 3) {
