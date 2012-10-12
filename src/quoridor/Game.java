@@ -15,8 +15,10 @@ public class Game {
     	for (Player current: players){
     		if (players.length == 4){
     			wallCount.put(current,  new Integer(5));
+    			current.setNumWalls(5);
     		} else {
     			wallCount.put(current,  new Integer(10));
+    			current.setNumWalls(10);
     		}
     		count ++;
     		current.setSymbol(count.toString());
@@ -31,12 +33,16 @@ public class Game {
     		players[3].setEnd(Direction.LEFT);
     		board.addPlayer(new Move(4, 8), players[3]);
     	}
-    	board.printBoard();
+
         this.players = players;
     }
     
     public void printState(){
-    	
+    	for (Player current :players){
+	    System.out.println("Number of walls remaining for player " +
+	    		current.getName() + " is " + wallCount.get(current).toString());
+    	}
+    	board.printBoard();
     }
     
     public void makeMove(Move move, Player p){
@@ -44,6 +50,7 @@ public class Game {
     		board.placeWall(move);
     		int walls = wallCount.get(p);
     		wallCount.put(p, walls - 1);
+    		p.setNumWalls(walls);
     	} else {
     		
     	}

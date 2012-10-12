@@ -37,8 +37,7 @@ public class Human implements Player {
 	public Move getMove(Game g){
 	    String temp = "";
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	    System.out.println("Number of walls remaining for player " +
-	    		this.name + " is " + this.numWalls);
+		g.printState();
 	    while(true){
 	    	System.out.print("Enter the move for player " + this.symbol + ":");
 	    	try {temp = in.readLine();} catch(IOException e) {}
