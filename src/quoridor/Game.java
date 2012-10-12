@@ -51,7 +51,7 @@ public class Game {
     		board.placeWall(move);
     		int walls = wallCount.get(p);
     		wallCount.put(p, walls - 1);
-    		p.setNumWalls(walls);
+    		p.setNumWalls(walls - 1);
     	} else {
     		board.placeMove(move, p);
     	}
@@ -111,13 +111,13 @@ public class Game {
     	for (Player current: players){
     		Move position = board.positionOf(current);
     		if (current.getEnd() == Direction.UP){
-    			return position.getRow() == 0;
+    			finished = finished || position.getRow() == 0;
     		} else if (current.getEnd() == Direction.DOWN){
-    			return position.getRow() == 8;
+    			finished = finished || position.getRow() == 8;
     		} else if (current.getEnd() == Direction.LEFT){
-    			return position.getCol() == 0;
+    		    finished = finished || position.getCol() == 0;
     		} else if (current.getEnd() == Direction.RIGHT){
-    			return position.getCol() == 8;
+    		    finished = finished || position.getCol() == 8;
     		}
     	}
     	return finished;
