@@ -13,14 +13,14 @@ public class Game {
     		current.setSymbol(count.toString());
     	}
 		players[0].setEnd(Direction.DOWN);
-		board.addPlayer(new Move(4, 0), players[0]);
+		board.addPlayer(new Move(0, 4), players[0]);
 		players[1].setEnd(Direction.UP);
-		board.addPlayer(new Move(4, 8), players[1]);
+		board.addPlayer(new Move(8, 4), players[1]);
     	if (players.length == 4){
-    		players[3].setEnd(Direction.RIGHT);
-    		board.addPlayer(new Move(0, 4), players[2]);
-    		players[4].setEnd(Direction.LEFT);
-    		board.addPlayer(new Move(8, 4), players[3]);
+    		players[2].setEnd(Direction.RIGHT);
+    		board.addPlayer(new Move(4, 0), players[2]);
+    		players[3].setEnd(Direction.LEFT);
+    		board.addPlayer(new Move(4, 8), players[3]);
     	}
     	board.printBoard();
         board = new Board();
