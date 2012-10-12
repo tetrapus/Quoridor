@@ -9,6 +9,8 @@ package quoridor;
 public class Box {
     int row;
     int col;
+    
+    // TODO: private/public problems
 
     Player contents;
     Box[] adjacent;

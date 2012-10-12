@@ -90,14 +90,11 @@ public class Board {
         boxes[m.getRow()][m.getCol()].setPlayer(p);
     }
     
-    public int getDistanceToEnd(Move location) {
-        return 0;
-    }
-    
     public boolean flood() {
         LinkedList<Box> visited = new LinkedList<Box>();
         Queue<Box> q = new LinkedList<Box>();
         q.add(boxes[0][0]);
+        visited.add(boxes[0][0]);
         Box current;
         Box temp;
         while (!q.isEmpty()) {
@@ -133,39 +130,37 @@ public class Board {
             }
             if (validity) {
                 // Test if we can flood the board
-                placeWall
+                placeWall(m);
+                if (!flood()) {
+                    validity = false;
+                }
+                removeWall(m);
             }
         } else {
             Move pm = positionOf(p);
-            int rowdiff = m.getRow() - pm.getRow();
-            int coldiff = m.getCol() - pm.getCol();
-            validity = validity
-                       && (Math.abs(rowdiff) == 1
-                           ^ Math.abs(coldiff) == 1);
-            Direction movement;
-            if (rowdiff == 1) {
-                movement = Direction.DOWN;
-            } else if (rowdiff == -1) {
-                movement = Direction.UP;
-            } else if (coldiff == 1) {
-                movement = Direction.RIGHT;
-            } else {
-                movement = Direction.LEFT;
-            }
-            Box b = boxes[pm.getRow()][pm.getCol()];
-            
-            while (b != null && b.getPlayer() != null) {
-                b = b.getNeighbour(movement);
-                if (b == null) {
-                    validity = false;
+            LinkedList<Box> adjacent = new LinkedList<Box>();
+            Queue<Box> q = new LinkedList<Box>();
+            q.add(boxes[pm.getRow()][pm.getCol()]);
+            Box current;
+            Box temp;
+            while (!q.isEmpty()) {
+                current = q.remove();
+                for (Direction dir : Direction.values()) {
+                    temp = current.getNeighbour(dir);
+                    if (temp != null && !visited.contains(temp)) {
+                        visited.add(temp);
+                        q.add(temp);
+                    }
                 }
             }
         }
         return validity;
     }
     
-    public boolean placeMove(Move m, Player p) {
-        
+    public void placeMove(Move m, Player p) {
+        Move from = positionOf(p);
+        boxes[from.getRow()][from.getCol()].setPlayer(null);
+        boxes[m.getRow()][m.getCol()].setPlayer(p);
     }
     
     public boolean placeWall(Move position) throws IllegalStateException {
