@@ -62,7 +62,7 @@ public class Main {
 		game = new Game(players);// players);
 		
 		game.play();
-		
+		System.out.println("Player "+ game.getWinner().getName() + "wins!");
 		//String winner = game.getWinner();
 		//System.out.println("The winner is " + winner);
 	}

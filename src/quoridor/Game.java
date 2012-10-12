@@ -137,8 +137,27 @@ public class Game {
     	return false;
     }
     public Player getWinner(){
-    	Player winner = null;
-    	return winner;
+    	for (Player current: players){
+    		Move position = board.positionOf(current);
+    		if (current.getEnd() == Direction.UP){
+    			if (position.getRow() == 0) {
+    				return current;
+    			}
+    		} else if (current.getEnd() == Direction.DOWN){
+    			if (position.getRow() == 8){
+    				return current;
+    			}
+    		} else if (current.getEnd() == Direction.LEFT){
+    			if (position.getCol() == 0){
+    				return current;
+    			}
+    		} else if (current.getEnd() == Direction.RIGHT){
+    			if (position.getCol() == 8){
+    				return current;
+    			}
+    		}
+    	}
+    	return null;
     }
     
     public void play(){
