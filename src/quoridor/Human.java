@@ -30,11 +30,11 @@ public class Human implements Player {
 	}
 	@Override
 	public void setNumWalls(int numWalls) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubdirection
 		this.numWalls = numWalls;
 	}
 	@Override
-	public Move getMove(Game g) {
+	public Move getMove(Game g) throws IOException {
 	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    System.out.println("Number of walls remaining for player " +
 	    		this.name + " is " + this.numWalls);
