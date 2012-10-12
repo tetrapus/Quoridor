@@ -24,7 +24,7 @@ public class Main {
 		while(size != 2 && size != 4	){
 			temp = "";
 			while(!tryParseInt(temp)){
-				System.out.print("Enter the number of players(2/4): ");
+				System.out.print("Enter the number of players (2/4): ");
 				temp = in.readLine();
 			}
 
@@ -34,28 +34,28 @@ public class Main {
 		
 		for (Integer i = 1; i<= size; i++){
 			temp = "";
-			while (!temp.equals("H") && !temp.equals("AI")){
-				System.out.print("Enter the type of player " + i.toString() + " human or AI(H/AI): ");
+			while (!temp.toLowerCase().matches("(ai?|h(uman)?)")) {
+				System.out.print("Enter the type of player " + i.toString() + " human or AI(human/ai): ");
 				temp = in.readLine();
 			}
-			if (temp.equals("H")){
+			if (temp.toLowerCase().matches("h(uman)?")){
 				players[i - 1] = new Human();
 			} else {
-				while (!temp.equals("EASY") && !temp.equals("MEDIUM") && !temp.equals("HARD")){
+				while (!temp.toLowerCase().matches("(e(asy)?|m(edium)?|h(ard)?")){
 					System.out.print("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
 					temp = in.readLine();
 				}
 				Difficulty diff;
-				if (temp.equals("EASY")){
+				if (temp.toLowerCase().matches("e(asy)?")){
 					diff = Difficulty.Easy;
-				} else if (temp.equals("HARD")){
+				} else if (temp.toLowerCase().matches("h(ard)?")){
 					diff = Difficulty.Hard;
 				} else {
 					diff = Difficulty.Normal;
 				}
 				players[i - 1] = new AI(diff);
 			}
-			System.out.print("Enter the name of player " + i.toString() + ":");
+			System.out.print("Enter the name of player " + i.toString() + ": ");
 			temp = in.readLine();
 			players[i - 1].setName(temp);
 		}
