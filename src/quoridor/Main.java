@@ -58,20 +58,12 @@ public class Main {
 			temp = in.readLine();
 			players[i - 1].setName(temp);
 		}
-		while (size % 2 == 0){
-			temp = "";
-			while(!tryParseInt(temp)){
-				System.out.print("Enter the board size, must be odd number: ");
-				temp = in.readLine();
-			}
-			size = Integer.parseInt(temp);
-		}
 		game = new Game(players);// players);
 		
 		game.play();
 		
-		String winner = game.getWinner();
-		System.out.println("The winner is " + winner);
+		//String winner = game.getWinner();
+		//System.out.println("The winner is " + winner);
 	}
 	/**
 	 * @param string which is meant to be an int

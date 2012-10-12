@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Game {
     LinkedList<Move> history;
-    Board board;
+    Board board = new Board();
     Player[] players;
     public Game(Player[] players) {
     	Integer count = 0;
