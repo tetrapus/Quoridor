@@ -6,10 +6,10 @@ import java.util.List;
 public class Game {
 	
     LinkedList<String> history = new LinkedList<String>();
+    LinkedList<String> future = new LinkedList<String>();
     Board board = new Board();
     Player[] players;
     Integer[] wallCount;
-    int historyPos = 0;
     
     public Game(Player[] players) {
     	Integer count = 0;
@@ -68,7 +68,8 @@ public class Game {
     }
     
     private void makeMove(Move move, Player p){
-        historyPos++;    	
+        // No future!
+        future.removeAll(future);
     	if (move.isWall()){
     		history.add(move.toString());
     		board.placeWall(move);
@@ -82,9 +83,9 @@ public class Game {
     }	
     
     private void undo() {
-        historyPos--;
-        String command = history.get(historyPos);
-        Player p = players[(historyPos) % players.length];
+        String command = history.remove();
+        future.add(command);
+        Player p = players[(history.size()) % players.length];
         if (command.length() == 3) {
             board.removeWall(new Move(command));
         } else {
@@ -93,9 +94,9 @@ public class Game {
     }
 
     private void redo() {
-        String command = history.get(historyPos);
-        Player p = players[(historyPos) % players.length];
-        historyPos++;
+        String command = future.remove();
+        history.add(command);
+        Player p = players[(history.size()-1) % players.length];
         if (command.length() == 3) {
             board.placeWall(new Move(command));
         } else {
@@ -174,7 +175,7 @@ public class Game {
         try {
             move = new Move(m);
         } catch (IllegalArgumentException e) {
-            if ((m.equals("undo") && historyPos > 0) || (m.equals("redo") && historyPos < history.size())) {
+            if ((m.equals("undo") && history.size() > 0) || (m.equals("redo") && future.size() > 0)) {
                 return true;
             } else {
                 return false;
@@ -223,7 +224,6 @@ public class Game {
     	            curPlayer++;
     		    }
                 curPlayer = (curPlayer + players.length) % players.length;
-                System.out.println(curPlayer);
     		}
        	}
     }

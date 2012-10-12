@@ -121,7 +121,6 @@ public class Board {
     public boolean validMove(Move m, Player p) {
         boolean validity = true;
         if (m.isWall()) {
-            System.out.println("firing");
             Box northwest = boxes[m.getRow()][m.getCol()];
             Box northeast = boxes[m.getRow()][m.getCol()+1];
             Box southwest = boxes[m.getRow()+1][m.getCol()];
