@@ -8,7 +8,7 @@ package quoridor;
 import java.io.*;
 
 public class Main {
-	private static Board game;
+	private static Game game;
 	/**
 	 * IO handling function
 	 * gets players and starts the game
@@ -66,11 +66,9 @@ public class Main {
 			}
 			size = Integer.parseInt(temp);
 		}
-		game = new Board(size, players);// players);
-		while(!game.finished()){
-			game.makeMove();
-			game.printState();
-		}
+		game = new Game(players);// players);
+		
+		game.play();
 		
 		String winner = game.getWinner();
 		System.out.println("The winner is " + winner);

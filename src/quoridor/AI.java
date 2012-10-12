@@ -4,6 +4,7 @@ public class AI implements Player {
 	private String name;
 	private int numWalls;
 	private Difficulty dif;
+	private String symbol;
 	public int getNumWalls() {
 		return numWalls;
 	}
@@ -30,6 +31,16 @@ public class AI implements Player {
 		// TODO Auto-generated method stub
 		
 		return null;
+	}
+	@Override
+	public String getSymbol() {
+		// TODO Auto-generated method stub
+		return this.symbol;
+	}
+	@Override
+	public void setSymbol(String symbol) {
+		// TODO Auto-generated method stub
+		this.symbol = symbol;
 	}
 
 }
