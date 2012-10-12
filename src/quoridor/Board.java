@@ -13,7 +13,8 @@ public class Board {
     Player[] players;
     Box[][]  boxes;
     
-    public Board(int size) {
+    public Board(int size, Player[] players) {
+        this.players = players;
         assert !(size % 2 == 1);
         boxes = new Box[size][size];
         // Make the boxes
@@ -26,22 +27,22 @@ public class Board {
         
         for (int i = 1; i < boxes.length; i++) {
             for (int j = 0; j < boxes.length; j++) {
-                boxes[i][j].setNeighbour(Direction.Up, boxes[i - 1][j]);
+                boxes[i][j].setNeighbour(Direction.UP, boxes[i - 1][j]);
             }
         }
         for (int i = 0; i < boxes.length - 1; i++) {
             for (int j = 0; j < boxes.length; j++) {
-                boxes[i][j].setNeighbour(Direction.Down, boxes[i + 1][j]);
+                boxes[i][j].setNeighbour(Direction.DOWN, boxes[i + 1][j]);
             }
         }
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 1; j < boxes.length; j++) {
-                boxes[i][j].setNeighbour(Direction.Left, boxes[i][j - 1]);
+                boxes[i][j].setNeighbour(Direction.LEFT, boxes[i][j - 1]);
             }
         }
         for (int i = 0; i < boxes.length - 1; i++) {
             for (int j = 0; j < boxes.length - 1; j++) {
-                boxes[i][j].setNeighbour(Direction.Right, boxes[i][j + 1]);
+                boxes[i][j].setNeighbour(Direction.RIGHT, boxes[i][j + 1]);
             }
         }
         
@@ -68,13 +69,13 @@ public class Board {
         Direction othersquare;
         Direction thisside;
         if (position.charAt(2) == 'h') {
-            otherside = Direction.Down;
-            thisside = Direction.Up;
-            othersquare = Direction.Right;
+            otherside = Direction.DOWN;
+            thisside = Direction.UP;
+            othersquare = Direction.RIGHT;
         } else if (position.charAt(2) == 'v') {
-            otherside = Direction.Right;
-            thisside = Direction.Left;
-            othersquare = Direction.Down;
+            otherside = Direction.RIGHT;
+            thisside = Direction.LEFT;
+            othersquare = Direction.DOWN;
         } else {
             throw new IllegalArgumentException("Invalid move string.");
         }

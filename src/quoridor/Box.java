@@ -20,13 +20,11 @@ public class Box {
     }
     
     public void setNeighbour(Direction direction, Box b) {
-        adjacent[direction] = b;
+        adjacent[direction.index()] = b;
     }
     public Box getNeighbour(Direction direction) {
-        return adjacent[direction];
+        return adjacent[direction.index()];
     }
-    
-    public void severWall(int direction)
     
     public void setPlayer(Player p) {
         this.contents = p;
