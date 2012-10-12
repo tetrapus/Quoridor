@@ -58,7 +58,7 @@ public class Board {
         System.out.println(" [4m a b c d e f g h i [24m");
         for (int i = 0; i < boxes.length; i++) {
             System.out.print(i + 1);
-            System.out.print("[4m|");
+            System.out.print("|");
             for (Box cell : boxes[i]) {
                 String cellname;
                 if (cell.getPlayer() == null) {
@@ -73,8 +73,10 @@ public class Board {
                 }
                 if (cell.getNeighbour(Direction.RIGHT) == null) {
                     cellname += "|";
-                } else {
+                } else if (i != 8) {
                     cellname += ".";
+                } else {
+                    cellname += " ";
                 }
                 System.out.print(cellname);
             }
