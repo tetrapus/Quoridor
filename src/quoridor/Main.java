@@ -19,36 +19,45 @@ public class Main {
 		System.out.println("Welcome to a java implementation of Quoridor");
 		System.out.println("Writen by Luke Pearson and Joseph Tuong");
 		String temp = "";
+		Integer size =0;
+		Player[] players = new Player[4];
+		while(size < 2 || size > 4	){
+			temp = "";
+			while(!tryParseInt(temp)){
+				System.out.print("Enter the number of players: ");
+				temp = in.readLine();
+			}
+
+			size = Integer.parseInt(temp);
+		}
 		
-		Player[] players = new Player[2];
 		
-		while (!temp.equals("H") && !temp.equals("AI")){
-			System.out.print("Enter the type of player 1 human or AI(H/AI): ");
+		for (Integer i = 1; i<= size; i++){
+			while (!temp.equals("H") && !temp.equals("AI")){
+				System.out.print("Enter the type of player " + i.toString() + " human or AI(H/AI): ");
+				temp = in.readLine();
+			}
+			if (temp.equals("H")){
+				players[i - 1] = new Human();
+			} else {
+				while (!temp.equals("EASY") && !temp.equals("MEDIUM") && !temp.equals("HARD")){
+					System.out.println("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
+					temp = in.readLine();
+				}
+				Difficulty diff;
+				if (temp.equals("EASY")){
+					diff = Difficulty.Easy;
+				} else if (temp.equals("HARD")){
+					diff = Difficulty.Hard;
+				} else {
+					diff = Difficulty.Normal;
+				}
+				players[i - 1] = new AI(diff);
+			}
+			System.out.print("Enter the name of player " + i.toString() + ":");
 			temp = in.readLine();
+			players[i - 1].setName(temp);
 		}
-		if (temp == "H"){
-			players[0] = new Human();
-		} else {
-			players[0] = new AI();
-		}
-		System.out.print("Enter the name of player 1: ");
-		temp = in.readLine();
-	
-		players[0].setName(temp);
-		temp = "";
-		while (!temp.equals("H") && !temp.equals("AI")){
-			System.out.print("Enter the type of player 2 human or AI(H/AI): ");
-			temp = in.readLine();
-		}
-		if (temp == "H"){
-			players[1] = new Human();
-		} else {
-			players[1] = new AI();
-		}
-		System.out.print("Enter the name of player 2: ");
-		temp = in.readLine();
-		int size = 0;
-		players[1].setName(temp);
 		while (size % 2 == 0){
 			temp = "";
 			while(!tryParseInt(temp)){
@@ -57,8 +66,6 @@ public class Main {
 			}
 			size = Integer.parseInt(temp);
 		}
-
-		
 		game = new Board(size, players);// players);
 		while(!game.finished()){
 			game.makeMove();

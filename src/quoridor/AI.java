@@ -22,6 +22,9 @@ public class AI implements Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+	AI(Difficulty diff){
+		this.dif = diff;
+	}
 	@Override
 	public String getMove() {
 		// TODO Auto-generated method stub
