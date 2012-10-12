@@ -9,7 +9,7 @@ public class Game {
     Board board = new Board();
     Player[] players;
     Integer[] wallCount;
-    int historyPos;
+    int historyPos = 0;
     
     public Game(Player[] players) {
     	Integer count = 0;
@@ -68,13 +68,12 @@ public class Game {
     }
     
     private void makeMove(Move move, Player p){
-    	
+        historyPos++;    	
     	if (move.isWall()){
     		history.add(move.toString());
-    		historyPos++;
     		board.placeWall(move);
-    		int walls = wallCount[Integer.parseInt(p.getSymbol())];
-    		wallCount[Integer.parseInt(p.getSymbol())] = walls - 1;
+    		int walls = wallCount[Integer.parseInt(p.getSymbol())-1];
+    		wallCount[Integer.parseInt(p.getSymbol())-1] = walls - 1;
     		p.setNumWalls(walls - 1);
     	} else {
     		history.add(board.positionOf(p).toString() + " " + move.toString());
@@ -83,6 +82,25 @@ public class Game {
     }	
     
     private void undo() {
+        historyPos--;
+        String command = history.get(historyPos);
+        Player p = players[(historyPos) % players.length];
+        if (command.length() == 3) {
+            board.removeWall(new Move(command));
+        } else {
+            board.placeMove(new Move(command.split(" ")[0]), p);
+        }
+    }
+
+    private void redo() {
+        String command = history.get(historyPos);
+        Player p = players[(historyPos) % players.length];
+        historyPos++;
+        if (command.length() == 3) {
+            board.placeWall(new Move(command));
+        } else {
+            board.placeMove(new Move(command.split(" ")[1]), p);
+        }
     }
     
     
@@ -138,7 +156,7 @@ public class Game {
     }
     public boolean validMove(Move m, Player p){
     	if (m.isWall()){
-    		if (wallCount[Integer.parseInt(p.getSymbol())] != 0){
+    		if (wallCount[Integer.parseInt(p.getSymbol())-1] != 0){
     			if (board.validMove(m, p)){
     				return true;
     			}
@@ -156,7 +174,8 @@ public class Game {
         try {
             move = new Move(m);
         } catch (IllegalArgumentException e) {
-            if ((m == "undo" && historyPos > 0) || (m == "redo" && historyPos < history.size() - 1)) {
+            System.out.println(historyPos);
+            if ((m.equals("undo") && historyPos > 0) || (m.equals("redo") && historyPos < history.size())) {
                 return true;
             } else {
                 return false;
@@ -194,17 +213,19 @@ public class Game {
     	while (!finished()){
     		String next = players[curPlayer].getMove(this);
     		if (validMove(next, players[curPlayer])){
-    		    if (next == "undo") {
-    		    } else if (next == "redo") {
-    		        
+    		    if (next.equals("undo")) {
+    		        undo();
+                    curPlayer--;
+    		    } else if (next.equals("redo")) {
+    		        redo();
+    		        curPlayer++;
     		    } else {
     		        makeMove(new Move(next), players[curPlayer]);
+    	            curPlayer++;
     		    }
     		}
-    		curPlayer++;
-    		if (curPlayer == players.length){
-    			curPlayer = 0;
-    		}
+    		
+    		curPlayer = (curPlayer + players.length) % players.length;
     	}
     }
 }
