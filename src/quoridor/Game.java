@@ -1,15 +1,16 @@
 package quoridor;
 
 import java.util.LinkedList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
+
 public class Game {
 	
-    LinkedList<Move> history = new LinkedList<Move>();
+    LinkedList<String> history = new LinkedList<String>();
     Board board = new Board();
     Player[] players;
     Integer[] wallCount;
+    int historyPos;
+    
     public Game(Player[] players) {
     	Integer count = 0;
     	this.wallCount = new Integer[players.length];
@@ -69,13 +70,14 @@ public class Game {
     private void makeMove(Move move, Player p){
     	
     	if (move.isWall()){
-    		history.add(move);
+    		history.add(move.toString());
+    		historyPos++;
     		board.placeWall(move);
     		int walls = wallCount[Integer.parseInt(p.getSymbol())];
     		wallCount[Integer.parseInt(p.getSymbol())] = walls - 1;
     		p.setNumWalls(walls - 1);
     	} else {
-    		history.add(board.positionOf(p));
+    		history.add(board.positionOf(p).toString() + " " + move.toString());
     		board.placeMove(move, p);
     	}
     }	
@@ -109,12 +111,12 @@ public class Game {
     		board.addPlayer(new Move(4, 8), fakePlayers[3]);
     	}
     	count = 0;
-    	for (Move next: history){
-    		if (next.isWall()){
-    			retval.placeWall(next);
+    	for (String next: history){
+    		if (next.length() == 3){
+    			retval.placeWall(new Move(next));
     			count ++;
     		} else {
-    			retval.placeMove(next, fakePlayers[count]);
+    			retval.placeMove(new Move(next.substring(3)), fakePlayers[count]);
     			count ++;
     		}
     		if (count == fakePlayers.length){
@@ -157,6 +159,21 @@ public class Game {
     	}
     	return false;
     }
+    
+    public boolean validMove(String m, Player p) {
+        Move move;
+        try {
+            move = new Move(m);
+        } catch (IllegalArgumentException e) {
+            if ((m == "undo" && historyPos > 0) || (m == "redo" && historyPos < history.size() - 1)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return validMove(move, p);
+    }
+    
     public Player getWinner(){
     	for (Player current: players){
     		Move position = board.positionOf(current);
@@ -184,9 +201,13 @@ public class Game {
     public void play(){
     	Integer curPlayer = 0;
     	while (!finished()){
-    		Move next = players[curPlayer].getMove(this);
+    		String next = players[curPlayer].getMove(this);
     		if (validMove(next, players[curPlayer])){
-    			makeMove(next, players[curPlayer]);
+    		    if (next == "undo" || next == "redo") {
+    		        
+    		    } else {
+    		        makeMove(new Move(next), players[curPlayer]);
+    		    }
     		}
     		curPlayer++;
     		if (curPlayer == players.length){

@@ -28,8 +28,8 @@ public class FakePlayer implements Player {
     public void setEnd(Direction end) {
     }
     
-    public Move getMove(Game g) {
-        return null;
+    public String getMove(Game g) {
+        return "";
     }
 
     private String name;
