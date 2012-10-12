@@ -115,6 +115,7 @@ public class Board {
                 }
             }
         }
+        System.out.println(visited.size());
         return visited.size() == size * size;
     }
     
@@ -181,47 +182,21 @@ public class Board {
     public boolean placeWall(Move position) throws IllegalStateException {
         // TODO: Make neater
         // The position specified is the northwest corner of the wall.
-        Direction otherside;
-        Direction othersquare;
-        Direction thisside;
-        if (position.getOrientation() == Wall.Horizontal) {
-            otherside = Direction.DOWN;
-            thisside = Direction.UP;
-            othersquare = Direction.RIGHT;
+        Box northwest = boxes[position.getRow()][position.getCol()];
+        Box northeast = boxes[position.getRow()][position.getCol()+1];
+        Box southwest = boxes[position.getRow()+1][position.getCol()];
+        Box southeast = boxes[position.getRow()+1][position.getCol()+1];
+
+        if (position.getOrientation() == Wall.Vertical) {
+            northwest.setNeighbour(Direction.RIGHT, null);
+            northeast.setNeighbour(Direction.LEFT, null);
+            southwest.setNeighbour(Direction.RIGHT, null);
+            southeast.setNeighbour(Direction.LEFT, null);
         } else {
-            otherside = Direction.RIGHT;
-            thisside = Direction.LEFT;
-            othersquare = Direction.DOWN;
-        }
-        
-        try {
-            /*
-             * The following fails iff a wall exists between the northwest and
-             * southwest walls.
-             */
-            Box northwest = boxes[position.getRow()][position.getCol()];
-            Box southwest = northwest.getNeighbour(otherside);
-            Box southeast = southwest.getNeighbour(othersquare);
-            Box northeast = northwest.getNeighbour(othersquare);
-            /*
-             * For a valid move, one or fewer of {northeast, southeast} are
-             * null. The if clause ensures that all boxes are defined.
-             */
-            if (northeast == null) {
-                northeast = southeast.getNeighbour(thisside);
-            } else {
-                southeast = northeast.getNeighbour(otherside);
-            }
-            if (northeast == null || southeast == null) {
-                // Occurs if there is a wall between northeast and southeast
-                return false;
-            }
-            northeast.setNeighbour(otherside, null);
-            northwest.setNeighbour(otherside, null);
-            southeast.setNeighbour(thisside, null);
-            southwest.setNeighbour(thisside, null);
-        } catch (NullPointerException e) {
-            return false;
+            northwest.setNeighbour(Direction.DOWN, null);
+            northeast.setNeighbour(Direction.DOWN, null);
+            southwest.setNeighbour(Direction.UP, null);
+            southeast.setNeighbour(Direction.UP, null);
         }
         return true;
     }

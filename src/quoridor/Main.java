@@ -17,7 +17,7 @@ public class Main {
 	public static void main (String[] argv) throws IOException{ 
 	     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Welcome to a java implementation of Quoridor");
-		System.out.println("YOU CANNOT PUT A FENCE AT A9H");
+		System.out.println("THERE IS NOTHING WRONG WITH NOBLOCKJUMP");
 		System.out.println("Writen by Luke Pearson and Joseph Tuong");
 		String temp = "";
 		Integer size =0;

@@ -53,12 +53,17 @@ public class Game {
     public boolean checkList(List<String> moves){
     	int count = 0;
     	for (String move: moves){
-    		Move m = new Move(move);
-    		if (validMove(m, players[count])){
-    			makeMove(m, players[count]);
-    		} else {
-    			return false;
-    		}
+    	    try {
+    	        Move m = new Move(move);
+                if (validMove(m, players[count])){
+                    makeMove(m, players[count]);
+                } else {
+                    return false;
+                }
+    	    } catch (IllegalArgumentException e) {
+    	        return false;
+    	    }
+
     		count ++;
     		if (count == players.length){
     			count = 0;
