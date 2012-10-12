@@ -9,15 +9,16 @@ public class Game {
     LinkedList<Move> history = new LinkedList<Move>();
     Board board = new Board();
     Player[] players;
-    Dictionary<Player, Integer> wallCount = new Hashtable<Player, Integer>();
+    Integer[] wallCount;
     public Game(Player[] players) {
     	Integer count = 0;
+    	this.wallCount = new Integer[players.length];
     	for (Player current: players){
     		if (players.length == 4){
-    			wallCount.put(current,  new Integer(5));
+    			wallCount[count] = 5;
     			current.setNumWalls(5);
     		} else {
-    			wallCount.put(current,  new Integer(10));
+    			wallCount[count] = 10;
     			current.setNumWalls(10);
     		}
     		count ++;
@@ -33,14 +34,17 @@ public class Game {
     		players[3].setEnd(Direction.LEFT);
     		board.addPlayer(new Move(4, 8), players[3]);
     	}
-
+    	
         this.players = players;
+        
     }
     
     public void printState(){
+    	int count = 0;
     	for (Player current :players){
-	    System.out.println("Number of walls remaining for player " +
-	    		current.getName() + " is " + wallCount.get(current).toString());
+    			System.out.println("Number of walls remaining for player " +
+	    		current.getName() + " is " + wallCount[count].toString());
+    			count++;
     	}
     	board.printBoard();
     }
@@ -49,8 +53,8 @@ public class Game {
     	history.add(move);
     	if (move.isWall()){
     		board.placeWall(move);
-    		int walls = wallCount.get(p);
-    		wallCount.put(p, walls - 1);
+    		int walls = wallCount[Integer.parseInt(p.getSymbol())];
+    		wallCount[Integer.parseInt(p.getSymbol())] = walls - 1;
     		p.setNumWalls(walls - 1);
     	} else {
     		board.placeMove(move, p);
@@ -68,10 +72,8 @@ public class Game {
     	count = 0;
     	for (Player current: fakePlayers){
     		if (fakePlayers.length == 4){
-    			wallCount.put(current,  new Integer(5));
     			current.setNumWalls(5);
     		} else {
-    			wallCount.put(current,  new Integer(10));
     			current.setNumWalls(10);
     		}
     		count ++;
@@ -124,7 +126,7 @@ public class Game {
     }
     public boolean validMove(Move m, Player p){
     	if (m.isWall()){
-    		if (wallCount.get(p) != 0){
+    		if (wallCount[Integer.parseInt(p.getSymbol())] != 0){
     			if (board.validMove(m, p)){
     				return true;
     			}
