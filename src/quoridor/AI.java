@@ -45,10 +45,10 @@ public class AI implements Player {
         Board board = g.getBoard();
         Box current = null;
         Box[][] boxes = board.getBoxes();
+		LinkedList<Box> visited = new LinkedList<Box>();
         for (Box[] box: boxes){
         	for (Box b: box){
         		try {
-        			System.out.println(b.getPlayer().getSymbol() + this.symbol);
 	        		if (b.getPlayer().getSymbol().equals(this.symbol)){
 	        			current = b;
 	        		}
@@ -57,15 +57,17 @@ public class AI implements Player {
         }
 		boolean finished = false;
 		q.add(current);
+		visited.add(current);
 		while(finished == false && q.size() != 0){
 			current =q.remove();
 			Box next = null;
 			for (Direction i: Direction.values()){
 				next = current.getNeighbour(i);
 				if (next != null){
-					next.setParent(current);
-					System.out.println("(" +next.row + ", "+next.col + ")");
-					if (!checkIfVisited(next)){
+					//System.out.println("(" +next.row + ", "+next.col + ")");
+					if (!visited.contains(next)){
+						next.setParent(current);
+						visited.add(next);
 						q.add(next);
 						if (finished(next)){
 							finished = true;
@@ -101,20 +103,6 @@ public class AI implements Player {
 		return false;
 	}
 	
-	public boolean checkIfVisited(Box b){
-		boolean retval = false;
-		Box parent = b.parent;
-		while(!retval && parent!=null){
-			retval = equals(b, parent);
-			parent =  parent.parent;
-		}
-		return retval;
-	}
-	
-	public boolean equals(Box a, Box b){
-		return a.row == b.row && b.col == a.col;
-	}
-	
 	public Move getMoveNormal(Game g){
 		Move next = null;
 		return next;
@@ -127,13 +115,16 @@ public class AI implements Player {
 	
 	@Override
 	public String getMove(Game g) {
+		String retval = "";
 		if (this.dif == Difficulty.Easy){
-			return getMoveEasy(g).toString();
+			retval = getMoveEasy(g).toString();
 		} else if (this.dif == Difficulty.Normal) {
-			return getMoveNormal(g).toString();
+			retval = getMoveNormal(g).toString();
 		} else {
-			return getMoveHard(g).toString();
+			retval = getMoveHard(g).toString();
 		}
+		g.printState();
+		return retval;
 	}
 	@Override
 	public String getSymbol() {
