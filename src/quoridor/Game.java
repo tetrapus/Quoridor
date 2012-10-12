@@ -45,15 +45,62 @@ public class Game {
     	board.printBoard();
     }
     
-    public void makeMove(Move move, Player p){
+    private void makeMove(Move move, Player p){
+    	history.add(move);
     	if (move.isWall()){
     		board.placeWall(move);
     		int walls = wallCount.get(p);
     		wallCount.put(p, walls - 1);
     		p.setNumWalls(walls);
     	} else {
-    		
+    		board.placeMove(move, p);
     	}
+    }
+    
+    public Board getBoard(){
+    	Board retval = new Board();
+    	Integer count = 0;
+    	Player[] fakePlayers = new Player[4];
+    	for (Player current: players){
+    		Player[count] = new FakePlayer(current);
+    		count++;
+    	}
+    	count = 0;
+    	for (Player current: fakePlayers){
+    		if (fakePlayers.length == 4){
+    			wallCount.put(current,  new Integer(5));
+    			current.setNumWalls(5);
+    		} else {
+    			wallCount.put(current,  new Integer(10));
+    			current.setNumWalls(10);
+    		}
+    		count ++;
+    		current.setSymbol(count.toString());
+    	}
+    	fakePlayers[0].setEnd(Direction.DOWN);
+		board.addPlayer(new Move(0, 4), fakePlayers[0]);
+		fakePlayers[1].setEnd(Direction.UP);
+		board.addPlayer(new Move(8, 4), fakePlayers[1]);
+    	if (fakePlayers.length == 4){
+    		fakePlayers[2].setEnd(Direction.RIGHT);
+    		board.addPlayer(new Move(4, 0), fakePlayers[2]);
+    		fakePlayers[3].setEnd(Direction.LEFT);
+    		board.addPlayer(new Move(4, 8), fakePlayers[3]);
+    	}
+    	count = 0;
+    	for (Move next: history){
+    		if (next.isWall()){
+    			retval.placeWall(next);
+    			count ++;
+    		} else {
+    			retval.placeMove(next, fakePlayers[count]);
+    			count ++;
+    		}
+    		if (count == fakePlayers.length)){
+    			count = 0;
+    		}
+    	}
+    	return this.board.;
     }
     /**Checks each players position and returns a boolean 
      * 

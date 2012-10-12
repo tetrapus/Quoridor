@@ -24,10 +24,10 @@ public class Human implements Player {
 		this.name = name;
 	}
 	@Override
-	public int getNumWalls() {
-		// TODO Auto-generated method stub
-		return numWalls;
-	}
+		public int getNumWalls() {
+			// TODO Auto-generated method stub
+			return numWalls;
+		}
 	@Override
 	public void setNumWalls(int numWalls) {
 		// TODO Auto-generated method stubdirection
