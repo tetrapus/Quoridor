@@ -41,13 +41,17 @@ public class AI implements Player {
 	}
 	
 	public Move getShortestPath(Game g){
-		FakePlayer fake = new FakePlayer(this);
         Queue<Box> q = new LinkedList<Box>();
         Board board = g.getBoard();
-        Move startPos = board.positionOf(fake);
+        Box current = null;
         Box[][] boxes = board.getBoxes();
-        Box start = boxes[startPos.getRow()][startPos.getCol()];
-		Box current = start;
+        for (Box[] box: boxes){
+        	for (Box b: box){
+        		if (b.getPlayer().getSymbol().equals(this.symbol)){
+        			current = b;
+        		}
+        	}
+        }
 		boolean finished = false;
 		q.add(current);
 		while(finished == false && q.size() != 0){
