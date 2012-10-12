@@ -13,7 +13,6 @@ import quoridor.Move.Wall;
 public class Board {
     
     private final int size = 9;
-    private Player[] players;
     private Box[][]  boxes;
     
     public Board() {
@@ -45,11 +44,7 @@ public class Board {
             for (int j = 0; j < boxes.length - 1; j++) {
                 boxes[i][j].setNeighbour(Direction.RIGHT, boxes[i][j + 1]);
             }
-        }
-        
-        boxes[0][size / 2].setPlayer(players[0]);
-        boxes[size - 1][size / 2].setPlayer(players[1]);
-        
+        }        
     }
     
     public void printBoard() {

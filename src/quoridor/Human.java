@@ -3,6 +3,13 @@ package quoridor;
 public class Human implements Player {
 	private String name;
 	private int numWalls;
+	private String symbol;
+	public String getSymbol() {
+		return symbol;
+	}
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
 	public String getName() {
 		return name;
 	}

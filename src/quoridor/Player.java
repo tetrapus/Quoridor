@@ -13,6 +13,8 @@ public interface Player {
      * @param b current game state
      * @return move, in Glendinnings format.
      */
+	public String getSymbol();
+	public void setSymbol(String symbol);
 	public int getNumWalls();
 	public void setNumWalls(int numWalls);
 	public String getName();
