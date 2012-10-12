@@ -107,17 +107,17 @@ public class Game {
     public Board getBoard(){
     	Board retval = new Board();
     	Integer count = 0;
-    	Player[] fakePlayers = new Player[4];
+    	Player[] fakePlayers = new Player[players.length];
     	for (Player current: players){
     		fakePlayers[count] = new FakePlayer(current);
     		count++;
     	}
     	count = 0;
-		board.addPlayer(new Move(0, 4), fakePlayers[0]);
-		board.addPlayer(new Move(8, 4), fakePlayers[1]);
+    	retval.addPlayer(new Move(0, 4), fakePlayers[0]);
+    	retval.addPlayer(new Move(8, 4), fakePlayers[1]);
     	if (fakePlayers.length == 4){
-    		board.addPlayer(new Move(4, 0), fakePlayers[2]);
-    		board.addPlayer(new Move(4, 8), fakePlayers[3]);
+    		retval.addPlayer(new Move(4, 0), fakePlayers[2]);
+    		retval.addPlayer(new Move(4, 8), fakePlayers[3]);
     	}
     	count = 0;
     	for (String next: history){

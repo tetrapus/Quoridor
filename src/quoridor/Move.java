@@ -25,7 +25,7 @@ public class Move {
     }
     
     public Move(String move) throws IllegalArgumentException {
-        if (!isValidMoveString(move)) {
+    	if (!isValidMoveString(move)) {
             throw new IllegalArgumentException("Invalid move string.");
         }
         this.col = move.charAt(0) - 'a';

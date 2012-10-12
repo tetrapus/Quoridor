@@ -56,7 +56,6 @@ public class AI implements Player {
         	}
         }
 		boolean finished = false;
-		System.out.println(current);
 		q.add(current);
 		while(finished == false && q.size() != 0){
 			current =q.remove();
@@ -65,6 +64,7 @@ public class AI implements Player {
 				next = current.getNeighbour(i);
 				if (next != null){
 					next.setParent(current);
+					System.out.println("(" +next.row + ", "+next.col + ")");
 					if (!checkIfVisited(next)){
 						q.add(next);
 						if (finished(next)){
