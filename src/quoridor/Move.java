@@ -13,8 +13,8 @@ public class Move {
         if (!isValidMoveString(move)) {
             throw new IllegalArgumentException("Invalid move string.");
         }
-        this.row = move.charAt(0) - 'a';
-        this.col = move.charAt(1) - '1';
+        this.col = move.charAt(0) - 'a';
+        this.row = move.charAt(1) - '1';
         this.isWall = false;
         if (move.length() == 3) {
             this.isWall = true;
@@ -38,8 +38,12 @@ public class Move {
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);
         validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'i';
+        validity = validity && move.charAt(1) >= '1' && move.charAt(1) <= '9';
         if (move.length() == 3) {
-            validity = validity && (move.charAt(2) == 'v' ||  move.charAt(2) == 'h'); 
+            validity = validity && (move.charAt(2) == 'v' ||  move.charAt(2) == 'h');
+            validity = validity && move.charAt(1) <= 'h';
+            validity = validity && move.charAt(1) <= '8';
+
         } else if (move.length() > 3) {
             return false;
         }

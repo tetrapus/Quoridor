@@ -105,7 +105,6 @@ public class Game {
     		if (curPlayer == players.length){
     			curPlayer = 0;
     		}
-    		printState();
     	}
     }
 }

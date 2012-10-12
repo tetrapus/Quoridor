@@ -53,7 +53,7 @@ public class Board {
     public void printBoard() {
         System.out.println(" [4m a b c d e f g h i [24m");
         for (int i = 0; i < boxes.length; i++) {
-            System.out.print(i+1);
+            System.out.print(i + 1);
             System.out.print("[4m|");
             for (Box cell : boxes[i]) {
                 String cellname;
@@ -79,7 +79,9 @@ public class Board {
     public Move positionOf(Player p) {
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes.length; j++) {
-                if (p.equals(boxes[i][j].getPlayer())) { return new Move(i, j); }            }
+                if (p.equals(boxes[i][j].getPlayer())) { return new Move(i, j); }
+            }
+            
         }
         return null;
     }
@@ -108,21 +110,30 @@ public class Board {
                 }
             }
         }
-        return visited.size() == size*size;
+        return visited.size() == size * size;
     }
-    
     
     public boolean validMove(Move m, Player p) {
         boolean validity = true;
         if (m.isWall()) {
-            if (m.getOrientation() == Wall.Vertical && m.getRow() < size - 1) {
-                validity = validity && boxes[m.getRow()][m.getCol()].getNeighbour(Direction.RIGHT) != null;
-                validity = validity && boxes[m.getRow()+1][m.getCol()].getNeighbour(Direction.RIGHT) != null;
-            } else if (m.getOrientation() == Wall.Horizontal && m.getCol() < size - 1) {
-                validity = validity && boxes[m.getRow()][m.getCol()].getNeighbour(Direction.DOWN) != null;
-                validity = validity && boxes[m.getRow()][m.getCol()+1].getNeighbour(Direction.DOWN) != null;
+            Box northwest = boxes[m.getRow()][m.getCol()];
+            Box northeast = boxes[m.getRow()][m.getCol()+1];
+            Box southwest = boxes[m.getRow()+1][m.getCol()];
+            if (m.getOrientation() == Wall.Vertical) {
+                validity = validity && northwest.getNeighbour(Direction.RIGHT) != null;
+                validity = validity && southwest.getNeighbour(Direction.RIGHT) != null;
+                validity = validity && !(northwest.getNeighbour(Direction.DOWN) == null && northeast.getNeighbour(Direction.DOWN) == null);
+
+            } else if (m.getOrientation() == Wall.Horizontal) {
+                validity = validity && northwest.getNeighbour(Direction.DOWN) != null;
+                validity = validity && northeast.getNeighbour(Direction.DOWN) != null;
+                validity = validity && !(northwest.getNeighbour(Direction.RIGHT) == null && southwest.getNeighbour(Direction.RIGHT) == null);
             } else {
                 validity = false;
+            }
+            if (validity) {
+                // Test if we can flood the board
+                placeWall
             }
         } else {
             Move pm = positionOf(p);
@@ -151,6 +162,10 @@ public class Board {
             }
         }
         return validity;
+    }
+    
+    public boolean placeMove(Move m, Player p) {
+        
     }
     
     public boolean placeWall(Move position) throws IllegalStateException {
