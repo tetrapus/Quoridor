@@ -52,16 +52,22 @@ public class Board {
         
     }
     
-    public void addPlayer(Move m) {
-        
+    public void printBoard() {
+        System.out.println("  a  b  c  d  e  f  g  h  i  ");
+        System.out.println(" ");
+        for (Box[] row : boxes) {
+            for (Box cell : row) {
+                
+            }
+        }
+    }
+    
+    public void addPlayer(Move m, Player p) {
+        boxes[m.getRow()][m.getCol()].setPlayer(p);
     }
     
     public int getDistanceToEnd(Move location) {
         return 0;
-    }
-    
-    public boolean isLegalMove(Move m) {
-        return true;
     }
     
     public boolean placeWall(Move position) throws IllegalStateException {
@@ -110,5 +116,15 @@ public class Board {
             return false;
         }
         return true;
+    }
+    
+    public void removeWall(Move position) {
+        int row = position.getRow();
+        int col = position.getCol();
+        boxes[row][col].setNeighbour(Direction.DOWN, boxes[row+1][col]);
+        boxes[row+1][col].setNeighbour(Direction.UP, boxes[row][col]);
+        boxes[row][col+1].setNeighbour(Direction.DOWN, boxes[row+1][col+1]);
+        boxes[row+1][col+1].setNeighbour(Direction.UP, boxes[row][col+1]);
+
     }
 }

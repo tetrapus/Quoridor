@@ -24,7 +24,7 @@ public class Move {
 
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);
-        validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'j';
+        validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'i';
         if (move.length() == 3) {
             validity = validity && (move.charAt(2) == 'v' ||  move.charAt(2) == 'h'); 
         } else if (move.length() > 3) {
@@ -33,6 +33,10 @@ public class Move {
         return true;
     }
     
+    public boolean isWall() {
+        return isWall;
+    }
+
     public int getRow() {
         return row;
     }
@@ -42,7 +46,7 @@ public class Move {
     }
     
     public Wall getOrientation() throws IllegalStateException {
-        if (!isWall) { throw new IllegalStateException("Not defined for this type of move."); }
+        if (!isWall()) { throw new IllegalStateException("Not defined for this type of move."); }
         return this.orientation;
     }
     
