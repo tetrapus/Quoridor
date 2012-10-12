@@ -143,18 +143,27 @@ public class Board {
         } else {
             Move pm = positionOf(p);
             LinkedList<Box> adjacent = new LinkedList<Box>();
+            LinkedList<Box> visited = new LinkedList<Box>();
             Queue<Box> q = new LinkedList<Box>();
             q.add(boxes[pm.getRow()][pm.getCol()]);
+            visited.add(boxes[pm.getRow()][pm.getCol()]);
             Box current;
             Box neighbour;
             while (!q.isEmpty()) {
                 current = q.remove();
                 for (Direction dir : Direction.values()) {
                     neighbour = current.getNeighbour(dir);
-                    //if (false)
-                    //adjacent.add()
+                    if (neighbour != null && !visited.contains(neighbour)) {
+                        if (neighbour.getPlayer() == null) {
+                            adjacent.add(neighbour);
+                        } else {
+                            q.add(neighbour);
+                        }
+                        visited.add(neighbour);
+                    }
                 }
             }
+            validity = validity && adjacent.contains(boxes[m.getRow()][m.getCol()]);
         }
         return validity;
     }

@@ -22,6 +22,22 @@ public class Move {
         }
     }
     
+    @Override
+    public boolean equals(Object m) {
+        if (!(m instanceof Move)) {
+            return false;
+        } else {
+            Move move = (Move) m;
+            boolean same = move.getRow() == getRow() && move.getCol() == getCol();
+            if (move.isWall() && isWall()) {
+                return same && this.getOrientation() == move.getOrientation();
+            } else if (move.isWall() != isWall()) {
+                return false;
+            }
+            return same;
+        }
+    }
+    
     public Move(int row, int col) {
         char rowMove = 'a';
         rowMove += row;
