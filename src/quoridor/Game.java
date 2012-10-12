@@ -223,9 +223,8 @@ public class Game {
     		        makeMove(new Move(next), players[curPlayer]);
     	            curPlayer++;
     		    }
+                curPlayer = (curPlayer + players.length) % players.length;
     		}
-    		
-    		curPlayer = (curPlayer + players.length) % players.length;
-    	}
+       	}
     }
 }
