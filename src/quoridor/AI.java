@@ -131,7 +131,8 @@ public class AI implements Player {
 		int score = alphaBeta(p1, p2, p2, board,0, -1000000, +1000000);
 		ArrayList<Move> moves = generateMoves(board, p1);
 		for (Move current: moves){
-			if (score(board.makeMove(current, p1)) == score){
+			int temp = score(board.makeMove(current, p1));
+			if (temp == score){
 				 next = current;
 				 break;
 			 }
