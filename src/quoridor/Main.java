@@ -63,10 +63,8 @@ public class Main {
 		game = new Game(players);// players);
 		
 		game.play();
-		System.out.println("Player "+ game.getWinner().getName() + " wins!");
-		game.printState();
-		//String winner = game.getWinner();
-		//System.out.println("The winner is " + winner);
+		game.getBoard().printBoard();
+        System.out.println("Player "+ game.getWinner().getName() + " wins!");
 	}
 	/**
 	 * @param string which is meant to be an int

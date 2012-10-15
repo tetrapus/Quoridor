@@ -9,17 +9,9 @@ package quoridor;
 public class Box {
     int row;
     int col;
-    Box parent = null;
     // TODO: private/public problems
 
     Player contents;
-    public Box getParent() {
-		return parent;
-	}
-
-	public void setParent(Box parent) {
-		this.parent = parent;
-	}
 
 	Box[] adjacent;
     
@@ -27,6 +19,10 @@ public class Box {
         this.row = row;
         this.col = col;
         this.adjacent = new Box[4];
+    }
+    
+    Position getPosition() {
+        return new Position(this.row, this.col);
     }
     
     public void setNeighbour(Direction direction, Box b) {

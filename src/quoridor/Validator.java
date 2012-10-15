@@ -11,12 +11,12 @@ public class Validator {
     // but the ProvidedTests code only calls the specified methods
     Player[] ar = new Player[2];
 
-	Game game;
+	Board board;
+	
     public Validator() {
-        // TODO
         ar[0] = new Human();
         ar[1] = new Human();
-        game = new Game(ar);
+        board = new Board(ar);
     }
 
     /**
@@ -30,8 +30,14 @@ public class Validator {
      * @return validity of the list of moves
      */
     public boolean check(List<String> moves) {
-        // TODO
-        return game.checkList(moves);
+        for (String move : moves) {
+            if (board.isValidMove(move)) {
+                board = board.makeMove(move);
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

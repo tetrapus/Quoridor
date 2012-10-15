@@ -1,235 +1,91 @@
+
 package quoridor;
 
+
 import java.util.LinkedList;
-import java.util.List;
+
 
 public class Game {
-	
-    LinkedList<String> history = new LinkedList<String>();
+    
     LinkedList<String> future = new LinkedList<String>();
-    Board board = new Board();
-    Player[] players;
-    Integer[] wallCount;
+    Board              board;
+    Player[]           players;
     
     public Game(Player[] players) {
-    	Integer count = 0;
-    	this.wallCount = new Integer[players.length];
-    	for (Player current: players){
-    		if (players.length == 4){
-    			wallCount[count] = 5;
-    			current.setNumWalls(5);
-    		} else {
-    			wallCount[count] = 10;
-    			current.setNumWalls(10);
-    		}
-    		count ++;
-    		current.setSymbol(count.toString());
-    	}
-		players[0].setEnd(Direction.UP);
-		board.addPlayer(new Move(8, 4), players[0]);
-		players[1].setEnd(Direction.DOWN);
-		board.addPlayer(new Move(0, 4), players[1]);
-    	if (players.length == 4){
-    		players[2].setEnd(Direction.RIGHT);
-    		board.addPlayer(new Move(4, 0), players[2]);
-    		players[3].setEnd(Direction.LEFT);
-    		board.addPlayer(new Move(4, 8), players[3]);
-    	}
-    	
         this.players = players;
-        
+        this.board = new Board(players);
     }
     
-    public void printState(){
-    	int count = 0;
-    	for (Player current :players){
-    			System.out.println("Number of walls remaining for player " +
-	    		current.getName() + " is " + wallCount[count].toString());
-    			count++;
-    	}
-    	board.printBoard();
+    public boolean isValidMove(String move) {
+        return (move.equals("redo") && future.size() > 0)
+                || board.isValidMove(move);
     }
     
-    public boolean checkList(List<String> moves){
-    	int count = 0;
-    	for (String move: moves){
-    	    try {
-    	        Move m = new Move(move);
-                if (validMove(m, players[count])){
-                    makeMove(m, players[count]);
-                } else {
-                    return false;
-                }
-    	    } catch (IllegalArgumentException e) {
-    	        return false;
-    	    }
-
-    		count ++;
-    		if (count == players.length){
-    			count = 0;
-    		}	
-    	}
-    	return true;
-    }
-    
-    private void makeMove(Move move, Player p){
-        // No future!
-        future.removeAll(future);
-    	if (move.isWall()){
-    		history.add(move.toString());
-    		board.placeWall(move);
-    		int walls = wallCount[Integer.parseInt(p.getSymbol())-1];
-    		wallCount[Integer.parseInt(p.getSymbol())-1] = walls - 1;
-    		p.setNumWalls(walls - 1);
-    	} else {
-    		history.add(board.positionOf(p).toString() + " " + move.toString());
-    		board.placeMove(move, p);
-    	}
-    }	
-    
-    private void undo() {
-        String command = history.removeLast();
-        future.add(command);
-        Player p = players[(history.size()) % players.length];
-        if (command.length() == 3) {
-            board.removeWall(new Move(command));
-        } else {
-            board.placeMove(new Move(command.split(" ")[0]), p);
-        }
-    }
-
     private void redo() {
         String command = future.removeLast();
-        history.add(command);
-        Player p = players[(history.size()-1) % players.length];
         if (command.length() == 3) {
-            board.placeWall(new Move(command));
+            board = board.makeMove(command);
         } else {
-            board.placeMove(new Move(command.split(" ")[1]), p);
+            board = board.makeMove(command.split(" ")[1]);
         }
     }
     
-    
-    public Board getBoard(){
-    	Board retval = new Board();
-    	Integer count = 0;
-    	Player[] fakePlayers = new Player[players.length];
-    	for (Player current: players){
-    		fakePlayers[count] = new FakePlayer(current);
-    		count++;
-    	}
-    	count = 0;
-    	retval.addPlayer(new Move(8, 4), fakePlayers[0]);
-    	retval.addPlayer(new Move(0, 4), fakePlayers[1]);
-    	if (fakePlayers.length == 4){
-    		retval.addPlayer(new Move(4, 0), fakePlayers[2]);
-    		retval.addPlayer(new Move(4, 8), fakePlayers[3]);
-    	}
-    	count = 0;
-    	for (String next: history){
-    		if (next.length() == 3){
-    			retval.placeWall(new Move(next));
-    			count ++;
-    		} else {
-    			retval.placeMove(new Move(next.substring(3)), fakePlayers[count]);
-    			count ++;
-    		}
-    		if (count == fakePlayers.length){
-    			count = 0;
-    		}
-    	}
-    	return retval;
+    public Board getBoard() {
+        return board.clone();
     }
-    /**Checks each players position and returns a boolean 
+    
+    /**
+     * Checks each players position and returns a boolean
      * 
      * @return true if game over false if not over
      */
-    public boolean finished(){
-    	boolean finished = false;
-    	for (Player current: players){
-    		Move position = board.positionOf(current);
-    		if (current.getEnd() == Direction.UP){
-    			finished = finished || position.getRow() == 0;
-    		} else if (current.getEnd() == Direction.DOWN){
-    			finished = finished || position.getRow() == 8;
-    		} else if (current.getEnd() == Direction.LEFT){
-    		    finished = finished || position.getCol() == 0;
-    		} else if (current.getEnd() == Direction.RIGHT){
-    		    finished = finished || position.getCol() == 8;
-    		}
-    	}
-    	return finished;
-    }
-    public boolean validMove(Move m, Player p){
-    	if (m.isWall()){
-    		if (wallCount[Integer.parseInt(p.getSymbol())-1] != 0){
-    			if (board.validMove(m, p)){
-    				return true;
-    			}
-    		}
-    	} else {
-    		if (board.validMove(m, p)){
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-    
-    public boolean validMove(String m, Player p) {
-        Move move;
-        try {
-            move = new Move(m);
-        } catch (IllegalArgumentException e) {
-            if ((m.equals("undo") && history.size() > 0) || (m.equals("redo") && future.size() > 0)) {
-                return true;
-            } else {
-                return false;
+    public boolean finished() {
+        boolean finished = false;
+        for (Player current : players) {
+            Position position = board.positionOf(current);
+            if (current.getEnd() == Direction.UP) {
+                finished = finished || position.getRow() == 0;
+            } else if (current.getEnd() == Direction.DOWN) {
+                finished = finished || position.getRow() == 8;
+            } else if (current.getEnd() == Direction.LEFT) {
+                finished = finished || position.getCol() == 0;
+            } else if (current.getEnd() == Direction.RIGHT) {
+                finished = finished || position.getCol() == 8;
             }
         }
-        return validMove(move, p);
+        return finished;
     }
     
-    public Player getWinner(){
-    	for (Player current: players){
-    		Move position = board.positionOf(current);
-    		if (current.getEnd() == Direction.UP){
-    			if (position.getRow() == 0) {
-    				return current;
-    			}
-    		} else if (current.getEnd() == Direction.DOWN){
-    			if (position.getRow() == 8){
-    				return current;
-    			}
-    		} else if (current.getEnd() == Direction.LEFT){
-    			if (position.getCol() == 0){
-    				return current;
-    			}
-    		} else if (current.getEnd() == Direction.RIGHT){
-    			if (position.getCol() == 8){
-    				return current;
-    			}
-    		}
-    	}
-    	return null;
+    public Player getWinner() {
+        for (Player current : players) {
+            Position position = board.positionOf(current);
+            if (current.getEnd() == Direction.UP) {
+                if (position.getRow() == 0) { return current; }
+            } else if (current.getEnd() == Direction.DOWN) {
+                if (position.getRow() == 8) { return current; }
+            } else if (current.getEnd() == Direction.LEFT) {
+                if (position.getCol() == 0) { return current; }
+            } else if (current.getEnd() == Direction.RIGHT) {
+                if (position.getCol() == 8) { return current; }
+            }
+        }
+        return null;
     }
     
-    public void play(){
-    	Integer curPlayer = 0;
-    	while (!finished()){
-    		String next = players[curPlayer].getMove(this);
-    		if (validMove(next, players[curPlayer])){
-    		    if (next.equals("undo")) {
-    		        undo();
-                    curPlayer--;
-    		    } else if (next.equals("redo")) {
-    		        redo();
-    		        curPlayer++;
-    		    } else {
-    		        makeMove(new Move(next), players[curPlayer]);
-    	            curPlayer++;
-    		    }
-                curPlayer = (curPlayer + players.length) % players.length;
-    		}
-       	}
+    public void play() {
+        while (!finished()) {
+            String next = players[board.currentPlayer() - 1].getMove(this);
+            if (isValidMove(next)) {
+                if (next.equals("redo")) {
+                    redo();
+                } else if (next.equals("undo")) {
+                    future.add(board.lastMove());
+                    board = board.makeMove(next);
+                } else {
+                    while (!future.isEmpty()) { future.remove(); }
+                    board = board.makeMove(next);
+                }
+            }
+        }
     }
 }
