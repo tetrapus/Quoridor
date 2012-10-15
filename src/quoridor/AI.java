@@ -5,7 +5,6 @@ package quoridor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.ArrayList;
 
 
 public class AI extends Player {
@@ -101,6 +100,7 @@ public class AI extends Player {
         while (players.get(0) != this.getID()) {
             players.add(players.remove(0));
         }
+        //players.add(players.remove(0));
         
         depth = 2;
         
@@ -138,20 +138,20 @@ public class AI extends Player {
         Position move = getShortestPath(state, player);
         List<Integer> others = state.getPlayers();
         others.remove(player - 1);
-        int max = getShortestPath(state, others.remove(0)).pathLength();
+        int min = getShortestPath(state, others.remove(0)).pathLength();
         for (int i : others) {
             int s = getShortestPath(state, i).pathLength();
-            if (s > max) {
-                max = s;
+            if (s < min) {
+                min = s;
             }
         }
-        return (max - move.pathLength());
+        return (min - move.pathLength());
     }
     
     public List<Position> generateMoves(Board state) {
-        List<Position> moves = state.validMoves(state.positionOf(state
-                .currentPlayer()));
-        if (state.remainingWalls(state.currentPlayer()) > 0) {
+        int player = state.currentPlayer();
+        List<Position> moves = state.validMoves(state.positionOf(player));
+        if (state.remainingWalls(player) > 0) {
             for (char i='1'; i<'9'; i++) {
                 for (char j='a'; j<'i'; j++) {
                     Position horstate = new Position(String.valueOf(j)+String.valueOf(i)+"h");
@@ -180,6 +180,7 @@ public class AI extends Player {
             List<Position> moves = generateMoves(state);
             if (p.equals(max)) {
                 for (Position next : moves) {
+                    //System.out.println(next);
                     score = alphaBeta(players, max,
                             state.makeMove(next.toString()), level + 1, alpha,
                             beta);
