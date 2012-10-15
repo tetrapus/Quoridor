@@ -81,10 +81,10 @@ public abstract class Player {
     }
     
     // Overridable
-    public void onCreation() {
+    protected void onCreation() {
     }
     
-    public void onFailure(Board b) {
+    protected void onFailure(Board b) {
     }
     
     public String getName() {

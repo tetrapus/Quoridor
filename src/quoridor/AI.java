@@ -26,7 +26,7 @@ public class AI extends Player {
     }
     
     public Position getMoveEasy(Board b) {
-        Position p = getShortestPath(b);
+        Position p = getShortestPath(b, b.currentPlayer());
         if (p.parent != null) {
             while (p.parent.parent != null) {
                 p = p.parent;
@@ -35,10 +35,10 @@ public class AI extends Player {
         return p;
     }
     
-    public Position getShortestPath(Board board) {
+    public Position getShortestPath(Board board, int pl) {
         Queue<Position> q = new LinkedList<Position>();
         LinkedList<Position> visited = new LinkedList<Position>();
-        Position current = board.positionOf(this);
+        Position current = board.positionOf(pl);
         
         boolean finished = false;
         
@@ -53,7 +53,7 @@ public class AI extends Player {
                     p.parent = current;
                     visited.add(p);
                     q.add(p);
-                    if (finished(p)) {
+                    if (finished(p, pl)) {
                         current = p;
                         finished = true;
                         break;
@@ -65,14 +65,14 @@ public class AI extends Player {
         return current;
     }
     
-    public boolean finished(Position p) {
-        if (this.getEnd() == Direction.UP && p.getRow() == 0) {
+    public boolean finished(Position p, Integer pl) {
+        if (pl == 1 && p.getRow() == 0) {
             return true;
-        } else if (this.getEnd() == Direction.DOWN && p.getRow() == 8) {
+        } else if (pl == 2 && p.getRow() == 8) {
             return true;
-        } else if (this.getEnd() == Direction.LEFT && p.getCol() == 0) {
+        } else if (pl == 3 && p.getCol() == 0) {
             return true;
-        } else if (this.getEnd() == Direction.RIGHT && p.getCol() == 8) { return true; }
+        } else if (pl == 4 && p.getCol() == 8) { return true; }
         return false;
     }
     
@@ -82,12 +82,12 @@ public class AI extends Player {
             players.add(players.remove(0));
         }
         
-        depth = 5;
+        depth = 2;
         
-        int maxscore = 0;
-        Position maxMove = null;
         List<Position> moves = board.validMoves(board.positionOf(this));
-        
+        Position maxMove = moves.remove(0);
+        int maxscore = alphaBeta(players, this.getID(),
+                board.makeMove(maxMove.toString()), 0, -1000000, +1000000);
         for (Position current : moves) {
             int temp = alphaBeta(players, this.getID(),
                     board.makeMove(current.toString()), 0, -1000000, +1000000);
@@ -120,21 +120,49 @@ public class AI extends Player {
     }
     
     public Integer score(Board state) {
-        Position move = getShortestPath(state);
-        return (8 - move.pathLength());// make longer lengths worth less
+        Position move = getShortestPath(state, state.currentPlayer());
+        List<Integer> others = state.getPlayers();
+        others.remove(state.currentPlayer() - 1);
+        int max = getShortestPath(state, others.remove(0)).pathLength();
+        for (int i : others) {
+            int s = getShortestPath(state, i).pathLength();
+            if (s > max) {
+                max = s;
+            }
+        }
+        return (max - move.pathLength());
     }
     
-    // maximises p1, minimises p2
+    public List<Position> generateMoves(Board state) {
+        List<Position> moves = state.validMoves(state.positionOf(state
+                .currentPlayer()));
+        if (state.remainingWalls(state.currentPlayer()) > 0) {
+            for (char i='1'; i<'9'; i++) {
+                for (char j='a'; j<'i'; j++) {
+                    Position horstate = new Position(String.valueOf(j)+String.valueOf(i)+"h");
+                    Position verstate = new Position(String.valueOf(j)+String.valueOf(i)+"v");
+                    if (state.isValidMove(horstate.toString())) {
+                        moves.add(horstate);
+                    }
+                    if (state.isValidMove(verstate.toString())) {
+                        moves.add(verstate);
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+    
     public Integer alphaBeta(List<Integer> players, Integer max, Board state,
             Integer level, Integer alpha, Integer beta) {
         Integer p = players.remove(0);
-        players.add(p); // rotate the list.
+        players.add(p);
         int score = 0;
         
         if (level == depth) {
             return score(state);
         } else {
-            List<Position> moves = state.validMoves(state.positionOf(state.currentPlayer()));
+            List<Position> moves = generateMoves(state);
             if (p.equals(max)) {
                 for (Position next : moves) {
                     score = alphaBeta(players, max,

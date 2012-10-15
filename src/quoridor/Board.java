@@ -129,6 +129,10 @@ public class Board {
         return ps;
     }
     
+    public int remainingWalls(int player) {
+        return players[player-1].getNumWalls();
+    }
+    
     public int currentPlayer() {
         return players[current].getID();
     }
