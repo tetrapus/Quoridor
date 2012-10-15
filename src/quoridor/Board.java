@@ -172,7 +172,15 @@ public class Board {
         }
         return validity;
     }
-    
+    public Board makeMove(Move m, Player p){
+    	Board retval = this.clone();
+    	if (m.isWall()){
+    		retval.placeWall(m);
+    	} else {
+    		retval.placeMove(m, p);
+    	}
+    	return retval;
+    }
     public void placeMove(Move m, Player p) {
         Move from = positionOf(p);
         boxes[from.getRow()][from.getCol()].setPlayer(null);
@@ -218,5 +226,11 @@ public class Board {
             boxes[row + 1][col + 1].setNeighbour(Direction.LEFT, boxes[row][col + 1]);
         }
         
+    }
+    @Override
+    public Board clone(){
+    	Board retval = new Board();
+    	retval.boxes = this.boxes.clone();
+    	return retval;
     }
 }

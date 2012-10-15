@@ -1,13 +1,14 @@
 package quoridor;
 import java.util.LinkedList;
 import java.util.Queue;
-
+import java.util.ArrayList;
 public class AI implements Player {
 	private String name;
 	private int numWalls;
 	private Difficulty dif;
 	private String symbol;
 	private Direction end;
+	private int depth;
 	public Direction getEnd() {
 		return end;
 	}
@@ -37,12 +38,11 @@ public class AI implements Player {
 	}
 	
 	public Move getMoveEasy(Game g){
-		return getShortestPath(g);
+		return getShortestPath(g.getBoard());
 	}
 	
-	public Move getShortestPath(Game g){
+	public MoveLength getShortestPath(Board board){
         Queue<Box> q = new LinkedList<Box>();
-        Board board = g.getBoard();
         Box current = null;
         Box[][] boxes = board.getBoxes();
 		LinkedList<Box> visited = new LinkedList<Box>();
@@ -57,7 +57,9 @@ public class AI implements Player {
         }
 		boolean finished = false;
 		q.add(current);
+		current.setParent(null);
 		visited.add(current);
+
 		while(finished == false && q.size() != 0){
 			current =q.remove();
 			Box next = null;
@@ -70,41 +72,70 @@ public class AI implements Player {
 						visited.add(next);
 						q.add(next);
 						if (finished(next)){
-							finished = true;
 							current = next;
+							finished = true;
+							break;
 						}
-					} else {
-						next = null;
-				    }
+					}
 				}				
 			}
 		} 
 		Move last = null;
+		int count = 0;
 		while(current.getParent() != null){
-
-			System.out.println("(" + current.row + "," + current.col + ") ");
+			count ++;
+			//System.out.println("(" + current.row + "," + current.col + ") ");
 			last = new Move(current.row, current.col);
+			
 			current = current.getParent();
 		}
+		MoveLength lastLength = new MoveLength(last.getRow(), last.getCol());
+		lastLength.length = count;
 		// TODO Auto-generated method stub
-		return last;
+		return lastLength;
 	}
 	
 	public boolean finished(Box b){
-		if (this.end == Direction.UP){
-			return b.row == 0;
-		} else if (this.end == Direction.DOWN){
-			return b.row == 8;
-		} else if (this.end == Direction.LEFT){
-			return b.col == 0;
-		} else if (this.end == Direction.RIGHT){
-			return b.col == 8;
+		if (this.end == Direction.UP && b.row == 0){
+			return true;
+		} else if (this.end == Direction.DOWN && b.row == 8){
+			return true;
+		} else if (this.end == Direction.LEFT && b.col == 0){
+			return true;
+		} else if (this.end == Direction.RIGHT && b.col == 8){
+			return true;
 		}
 		return false;
 	}
 	
 	public Move getMoveNormal(Game g){
 		Move next = null;
+		Board board = g.getBoard();
+        Box[][] boxes = board.getBoxes();
+        Player p1 = null, p2 = null;
+        for (Box[] box: boxes){
+        	for (Box b: box){
+        		try {
+	        		if (b.getPlayer() != null){
+	        			if (b.getPlayer().getSymbol().equals(this.symbol)){
+	        				p1 = b.getPlayer();
+	        			} else {
+	        				p2 = b.getPlayer();
+	        			}
+	        		}
+        		} catch (NullPointerException n) {}
+        	}
+        }
+        
+        depth = 1;
+		int score = alphaBeta(p1, p2, p2, board,0, -1000000, +1000000);
+		ArrayList<Move> moves = generateMoves(board, p1);
+		for (Move current: moves){
+			if (score(board.makeMove(current, p1)) == score){
+				 next = current;
+				 break;
+			 }
+		}
 		return next;
 	}
 	
@@ -136,5 +167,70 @@ public class AI implements Player {
 		// TODO Auto-generated method stub
 		this.symbol = symbol;
 	}
-
+	public Integer score(Board state){
+		MoveLength move = getShortestPath(state);
+		return (8 - move.length);//make longer lengths worth less
+	}
+		
+	public ArrayList<Move> generateMoves(Board state, Player current){
+		ArrayList<Move> moves = new ArrayList<Move>();
+		Move initial = state.positionOf(current);
+		int y = initial.getCol();
+		int x = initial.getRow();
+		int addY = 1, addX = 1;
+		if (y < 8){
+		moves.add(new Move(x, y+1));
+		}
+		if (y > 0){
+		moves.add(new Move(x, y-1));
+		}
+		if (x > 0){
+		moves.add(new Move(x-1, y));
+		}
+		if (x < 8){
+		moves.add(new Move(x+1, y));//generate the moves around the player
+		}
+		return moves;
+	}
+	//maximises p1, minimises p2
+	public Integer alphaBeta(Player p1, Player p2, Player last, Board state,Integer level,Integer alpha,Integer beta){
+		int score = 0;
+		if (last.equals(p1)){
+			last = p2;
+		} else {
+			last = p1;
+		}
+		if (level == depth){
+			return score(state);
+		} else {
+			ArrayList<Move> moves = generateMoves(state, last);
+			if (last.equals(p1)) {
+				for (Move next: moves){
+					
+					score = alphaBeta(p1, p2, last, state.makeMove(next, last)
+							, level + 1, alpha, beta);
+					if (score > alpha){
+						alpha = score;
+					}
+					if (beta <= alpha){
+						break;
+					}
+				}
+				return alpha;
+			} else if (last.equals(p2)) {
+				for (Move next: moves){
+					score = alphaBeta(p1, p2, last, state.makeMove(next, last),
+							level + 1, alpha, beta);
+					if (score < beta){
+						beta = score;
+					}
+					if (beta <= alpha) {
+						break;
+					}
+				}
+				return beta;
+			}
+		}
+		return null;
+	}
 }
