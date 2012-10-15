@@ -82,9 +82,29 @@ public class AI extends Player {
             players.add(players.remove(0));
         }
         
+        List<Position> moves = generateMoves(board);
+        Position maxMove = moves.remove(0);
+        int maxscore = score(board.makeMove(maxMove.toString()), this.getID());
+        for (Position current : moves) {
+            int temp = score(board.makeMove(current.toString()), this.getID());
+            if (temp > maxscore) {
+                maxscore = temp;
+                maxMove = current;
+                break;
+            }
+        }
+        return maxMove;
+    }
+    
+    public Position getMoveHard(Board board) {
+        List<Integer> players = board.getPlayers();
+        while (players.get(0) != this.getID()) {
+            players.add(players.remove(0));
+        }
+        
         depth = 2;
         
-        List<Position> moves = board.validMoves(board.positionOf(this));
+        List<Position> moves = generateMoves(board);
         Position maxMove = moves.remove(0);
         int maxscore = alphaBeta(players, this.getID(),
                 board.makeMove(maxMove.toString()), 0, -1000000, +1000000);
@@ -98,11 +118,6 @@ public class AI extends Player {
             }
         }
         return maxMove;
-    }
-    
-    public Position getMoveHard(Board b) {
-        Position next = null;
-        return next;
     }
     
     @Override
@@ -119,10 +134,10 @@ public class AI extends Player {
         return retval;
     }
     
-    public Integer score(Board state) {
-        Position move = getShortestPath(state, state.currentPlayer());
+    public Integer score(Board state, int player) {
+        Position move = getShortestPath(state, player);
         List<Integer> others = state.getPlayers();
-        others.remove(state.currentPlayer() - 1);
+        others.remove(player - 1);
         int max = getShortestPath(state, others.remove(0)).pathLength();
         for (int i : others) {
             int s = getShortestPath(state, i).pathLength();
@@ -160,7 +175,7 @@ public class AI extends Player {
         int score = 0;
         
         if (level == depth) {
-            return score(state);
+            return score(state, p);
         } else {
             List<Position> moves = generateMoves(state);
             if (p.equals(max)) {
