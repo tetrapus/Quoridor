@@ -100,15 +100,20 @@ public class Board {
                 if (cell.getPlayer() == null) {
                     cellname = " ";
                 } else {
-                    cellname = new Integer(cell.getPlayer().getID()).toString();
+                    cellname = cell.getPlayer().getID().toString();
                     if (cell.getPlayer().getID() == currentPlayer()) {
-                        cellname = "[1m" + cellname + "[4m"; // fix this.
+                        cellname = "[1m" + cellname + "[0m";
                     }
                 }
                 if (cell.getNeighbour(Direction.DOWN) != null && i != 8) {
+                    
                     cellname = "[24m" + cellname;
                 } else {
+                    
                     cellname = "[4m" + cellname;
+                    if (cell.getPlayer() != null && cell.getPlayer().getID() == currentPlayer()) {
+                        cellname += "[4m";
+                    }
                 }
                 if (cell.getNeighbour(Direction.RIGHT) == null) {
                     cellname += "|";

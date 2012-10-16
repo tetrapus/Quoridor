@@ -102,7 +102,7 @@ public class AI extends Player {
         }
         //players.add(players.remove(0));
         
-        depth = 2;
+        depth = 1;
         
         List<Position> moves = generateMoves(board);
         Position maxMove = moves.remove(0);
@@ -141,7 +141,7 @@ public class AI extends Player {
         int min = getShortestPath(state, others.remove(0)).pathLength();
         for (int i : others) {
             int s = getShortestPath(state, i).pathLength();
-            if (s < min) {
+            if (s > min) {
                 min = s;
             }
         }
