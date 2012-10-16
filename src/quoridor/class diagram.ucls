@@ -10,7 +10,7 @@
   </class>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" name="quoridor.Board" project="Quoridor" 
     file="/Quoridor/src/quoridor/Board.java" binary="false">    
-    <position height="-1" width="-1" x="619" y="272"/>    
+    <position height="-1" width="-1" x="626" y="270"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -34,7 +34,7 @@
   </enumeration>  
   <enumeration id="5" corner="BOTTOM_RIGHT" language="java" name="quoridor.Direction" project="Quoridor" 
     file="/Quoridor/src/quoridor/Direction.java" binary="false">    
-    <position height="-1" width="-1" x="284" y="469"/>    
+    <position height="-1" width="-1" x="284" y="470"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -74,7 +74,7 @@
   </class>  
   <class id="10" corner="BOTTOM_RIGHT" language="java" name="quoridor.Position" project="Quoridor" 
     file="/Quoridor/src/quoridor/Position.java" binary="false">    
-    <position height="-1" width="-1" x="327" y="85"/>    
+    <position height="-1" width="-1" x="358" y="82"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
