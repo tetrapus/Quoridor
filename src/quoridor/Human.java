@@ -25,7 +25,7 @@ public class Human extends Player {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         b.printBoard();
         System.out.print("Enter the move for player "
-                + new Integer(this.getID()).toString() + ":");
+                + new Integer(this.getID()).toString() + ": ");
         try {
             temp = in.readLine();
         } catch (IOException e) {

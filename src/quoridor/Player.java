@@ -55,11 +55,11 @@ public abstract class Player {
         return this.direction;
     }
     
-    public final int getID() {
+    public final Integer getID() {
         return id;
     }
     
-    public final int getNumWalls() {
+    public final Integer getNumWalls() {
         return walls;
     }
     

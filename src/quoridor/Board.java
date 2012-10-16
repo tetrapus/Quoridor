@@ -86,6 +86,11 @@ public class Board {
     }
     
     public void printBoard() {
+        for (Player current : players){
+            System.out.println("Player " + current.getID().toString() + " (" + 
+            current.getName() + ") has " 
+                    + current.getNumWalls().toString() + " walls remaining.");
+        }
         System.out.println(" [4m a b c d e f g h i [24m");
         for (int i = 0; i < boxes.length; i++) {
             System.out.print(i + 1);
@@ -96,6 +101,9 @@ public class Board {
                     cellname = " ";
                 } else {
                     cellname = new Integer(cell.getPlayer().getID()).toString();
+                    if (cell.getPlayer().getID() == currentPlayer()) {
+                        cellname = "[1m" + cellname + "[4m"; // fix this.
+                    }
                 }
                 if (cell.getNeighbour(Direction.DOWN) != null && i != 8) {
                     cellname = "[24m" + cellname;
@@ -113,12 +121,8 @@ public class Board {
             }
             System.out.println("[24m");
         }
+        System.out.println("It is " + players[current].getName() +"'s turn.");
         
-        for (Player current : players){
-            System.out.println("Number of walls remaining for " +
-            current.getName() + " is " 
-                    + (new Integer(current.getNumWalls())).toString());
-        }
     }
     
     public List<Integer> getPlayers() {
@@ -155,7 +159,7 @@ public class Board {
         return positionOf(players[id-1]);
     }
     
-    public int playerAt(Position p) {
+    public Integer playerAt(Position p) {
         return boxes[p.getRow()][p.getCol()].contents.getID();
     }
     

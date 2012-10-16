@@ -15,6 +15,7 @@ public class Main {
 	 * @throws IOException 
 	 */
 	public static void main (String[] argv) throws IOException{ 
+	    String[] AInames = {"GLaQuOS", "Deep Cyan", "Quoribot", "Digital Turk"};
 	     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Welcome to a java implementation of Quoridor");
 		System.out.println("THERE IS NOTHING WRONG WITH NOBLOCKJUMP");
@@ -25,7 +26,7 @@ public class Main {
 		while(size != 2 && size != 4	){
 			temp = "";
 			while(!tryParseInt(temp)){
-				System.out.print("Enter the number of players (2/4): ");
+				System.out.print("Number of players (2/4): ");
 				temp = in.readLine();
 			}
 
@@ -36,14 +37,18 @@ public class Main {
 		for (Integer i = 1; i<= size; i++){
 			temp = "";
 			while (!temp.toLowerCase().matches("(ai?|h(uman)?)")) {
-				System.out.print("Enter the type of player " + i.toString() + " human or AI(human/ai): ");
+				System.out.print("Player " + i.toString() + " is a (human/ai): ");
 				temp = in.readLine();
 			}
 			if (temp.toLowerCase().matches("h(uman)?")){
 				players[i - 1] = new Human();
+
+	            System.out.print("Player " + i.toString() + " name: ");
+	            temp = in.readLine();
+	            players[i - 1].setName(temp);
 			} else {
 				while (!temp.toLowerCase().matches("(e(asy)?|m(edium)?|h(ard)?)")){
-					System.out.print("Enter the difficulty of the AI (EASY/MEDIUM/HARD): ");
+					System.out.print("AI difficulty (EASY/MEDIUM/HARD): ");
 					temp = in.readLine();
 				}
 				Difficulty diff;
@@ -55,10 +60,9 @@ public class Main {
 					diff = Difficulty.Normal;
 				}
 				players[i - 1] = new AI(diff);
+				players[i - 1].setName(AInames[i-1]);
+				
 			}
-			System.out.print("Enter the name of player " + i.toString() + ": ");
-			temp = in.readLine();
-			players[i - 1].setName(temp);
 		}
 		game = new Game(players);// players);
 		
