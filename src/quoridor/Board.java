@@ -417,7 +417,7 @@ public class Board {
         try {
             return isValidMove(new Position(m));
         } catch (IllegalArgumentException e) {
-            return (m.equals("undo") && history.size() > 0);
+            return m.equals("undo") && history.size() > 0;
         }
     }
     

@@ -3,7 +3,8 @@ package quoridor;
 
 
 import java.util.LinkedList;
-
+import java.util.regex.Pattern;
+import java.io.*;
 
 /**
  * Run a game of Quoridor.
@@ -109,7 +110,23 @@ public class Game {
     public void play() {
         while (!finished()) {
             String next = players[board.currentPlayer() - 1].getMove(this);
-            if (isValidMove(next)) {
+            if (Pattern.matches("save.*", next)){
+            	String[] args = next.split("\\s");
+            	
+            	try {
+					FileWriter writer = new FileWriter(args[1]);
+					for (Player p: players){
+						gamedata += p.t
+					}
+					writer.write(players.length+","+)
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+            
+            } else if (Pattern.matches("load\\s.*", next)){
+            	
+            } else if (isValidMove(next)) {
                 if (next.equals("redo")) {
                     redo();
                 } else if (next.equals("undo")) {
