@@ -1,5 +1,13 @@
 package quoridor;
 
+/**
+ * Abstractly represents a square on the board.
+ * 
+ * May also hold data about wall orientation, and generating position.
+ * 
+ * @author Joey Tuong
+ * @author Luke Pearson
+ */
 public class Position {
     
     public enum Wall { Horizontal, Vertical };
@@ -26,6 +34,12 @@ public class Position {
         return s.toString();
     }
     
+    /**
+     * Create a new position from the string representation.
+     * 
+     * @param move string representation of a position
+     * @throws IllegalArgumentException for invalid moves
+     */
     public Position(String move) throws IllegalArgumentException {
     	if (!isValidMoveString(move)) {
             throw new IllegalArgumentException("Invalid move string.");
@@ -55,6 +69,12 @@ public class Position {
         }
     }
     
+    /**
+     * Create a new non-wall position.
+     * 
+     * @param row row number
+     * @param col column number
+     */
     public Position(int row, int col) {
         char rowMove = 'a';
         rowMove += row;
@@ -68,6 +88,12 @@ public class Position {
         this.isWall = false;
     }
 
+    /**
+     * Get the adjacent square in a given direction.
+     *  
+     * @param d direction of the adjacent square
+     * @return resulting position
+     */
     public Position adjacentSquare(Direction d) {
         int newrow = this.row;
         int newcol = this.col;
@@ -80,6 +106,12 @@ public class Position {
         return new Position(newrow, newcol);
     }
     
+    /**
+     * Check if a move string is valid.
+     * 
+     * @param move move to check
+     * @return validity of move
+     */
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);
         validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'i';
@@ -95,23 +127,49 @@ public class Position {
         return validity;
     }
     
+    /**
+     * Get whether the position holds wall data.
+     * 
+     * @return whether position is a wall
+     */
     public boolean isWall() {
         return isWall;
     }
 
+    /**
+     * Get the row of the position.
+     * 
+     * @return row id
+     */
     public int getRow() {
         return row;
     }
-
+    
+    /**
+     * Get the column of the position.
+     * 
+     * @return column id
+     */
     public int getCol() {
         return col;
     }
     
+    /**
+     * Get the orientation of a wall.
+     * 
+     * @return wall orientation
+     * @throws IllegalStateException if position is not a wall.
+     */
     public Wall getOrientation() throws IllegalStateException {
         if (!isWall()) { throw new IllegalStateException("Not defined for this type of move."); }
         return this.orientation;
     }
     
+    /**
+     * Traverse upwards through a position path and return the length.
+     * 
+     * @return
+     */
     public int pathLength() {
         if (parent == null) {
             return 1;
@@ -120,6 +178,11 @@ public class Position {
         }
     }
     
+    /**
+     * Get the root node of a path.
+     * 
+     * @return root node
+     */
     public Position root() {
         if (parent == null) {
             return this;

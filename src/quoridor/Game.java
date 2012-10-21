@@ -5,22 +5,43 @@ package quoridor;
 import java.util.LinkedList;
 
 
+/**
+ * Run a game of Quoridor.
+ * 
+ * @author Joey Tuong
+ * @author Luke Pearson
+ *
+ */
 public class Game {
     
     LinkedList<String> future = new LinkedList<String>();
     Board              board;
     Player[]           players;
     
+    /**
+     * Create a new game with an array of players
+     * 
+     * @param players an array of 2 or 4 player objects
+     */
     public Game(Player[] players) {
-        this.players = players;
+        this.players = players; 
         this.board = new Board(players);
     }
     
+    /**
+     * Check if a move is valid at the game level.
+     * 
+     * @param move move to check for validity/
+     * @return whether the move is valid
+     */
     public boolean isValidMove(String move) {
         return (move.equals("redo") && future.size() > 0)
                 || board.isValidMove(move);
     }
     
+    /**
+     * Redo the last move. Unprotected.
+     */
     private void redo() {
         String command = future.removeLast();
         if (command.length() == 3) {
@@ -30,6 +51,11 @@ public class Game {
         }
     }
     
+    /**
+     * Get a copy of the current game board.
+     * 
+     * @return clone of the current board state
+     */
     public Board getBoard() {
         return board.clone();
     }
@@ -56,6 +82,11 @@ public class Game {
         return finished;
     }
     
+    /**
+     * Get the winner of the game (or null if not yet set)
+     * 
+     * @return winner of the game.
+     */
     public Player getWinner() {
         for (Player current : players) {
             Position position = board.positionOf(current);
@@ -72,6 +103,9 @@ public class Game {
         return null;
     }
     
+    /**
+     * Play a game until finished.
+     */
     public void play() {
         while (!finished()) {
             String next = players[board.currentPlayer() - 1].getMove(this);

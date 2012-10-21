@@ -5,6 +5,13 @@ package quoridor;
 import java.io.*;
 
 
+/**
+ * Provide a command line interface to a human player.
+ * 
+ * @author Joey Tuong
+ * @author Luke Pearson
+ *
+ */
 public class Human extends Player {
     
     boolean suppressPrompt;

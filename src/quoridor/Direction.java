@@ -12,6 +12,11 @@ public enum Direction {
         return index; 
     }
     
+    /**
+     * Get the opposite direction
+     * 
+     * @return opposite direction
+     */
     public Direction reverse() {
         if (this == Direction.DOWN) {
             return Direction.UP;

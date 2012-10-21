@@ -34,6 +34,11 @@ public abstract class Player {
     private int       id;
     private boolean   initialised = false;
     
+    /**
+     * Create a player object and set its name.
+     * 
+     * @param name Name of the player
+     */
     public Player(String name) {
         this.name = name;
     }
@@ -41,6 +46,16 @@ public abstract class Player {
     public Player() {
     }
     
+    /**
+     * Initialise the player with an ID, direction, and walls.
+     * 
+     * Initialise may only be called once, and will generally be called by the
+     * board class when the game is initialised.
+     * 
+     * @param id Player id
+     * @param d Target direction
+     * @param walls Number of walls
+     */
     public final void initialise(int id, Direction d, int walls) {
         if (!initialised) {
             this.id = id;
@@ -51,18 +66,38 @@ public abstract class Player {
         }
     }
     
+    /**
+     * Get the direction of the target wall.
+     * @return direction of target wall
+     */
     public final Direction getEnd() {
         return this.direction;
     }
     
+    /**
+     * Get the player's ID.
+     * 
+     * @return player's id
+     */
     public final Integer getID() {
         return id;
     }
     
+    /**
+     * Get the number of remaining walls.
+     * 
+     * @return number of remaining walls.
+     */
     public final Integer getNumWalls() {
         return walls;
     }
     
+    /**
+     * Template method to get the player's next move given a certain game state.
+     * 
+     * @param g Game object
+     * @return player's move.
+     */
     public final String getMove(Game g) {
         String move = this.nextMove(g.getBoard());
         while (!g.isValidMove(move) || (move.length() == 3 && getNumWalls() <= 0)) {
@@ -81,19 +116,40 @@ public abstract class Player {
     }
     
     // Overridable
+    /**
+     * Called on initialisation.
+     */
     protected void onCreation() {
     }
     
+    /**
+     * Called when a move returned by nextMove is not valid.
+     * @param b current board state
+     */
     protected void onFailure(Board b) {
     }
     
+    /**
+     * Get the name of the player.
+     * @return name of the player
+     */
     public String getName() {
         return this.name;
     }
     
+    /**
+     * Set the player's name.
+     * 
+     * @param name name of the player
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * Generate the player's next move.
+     * @param b board state
+     * @return next move
+     */
     public abstract String nextMove(Board b);
 }

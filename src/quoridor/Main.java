@@ -1,12 +1,13 @@
 package quoridor;
 
-/**
- * @author Luke
- * @author Joey Tuong
- */
-
 import java.io.*;
 
+/**
+ * Run a command line version of the game with AIs and Humans.
+ * 
+ * @author Luke Pearson
+ * @author Joey Tuong
+ */
 public class Main {
 	private static Game game;
 	/**

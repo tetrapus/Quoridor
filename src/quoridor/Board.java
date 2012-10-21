@@ -60,7 +60,8 @@ public class Board {
     /**
      * Construct a new board object initialised with a set of players
      * 
-     * @param players an array of 2 or 4 initial players
+     * @param players
+     *            an array of 2 or 4 initial players
      */
     public Board(Player[] players) {
         this.history = new LinkedList<String>();
@@ -82,8 +83,10 @@ public class Board {
     /**
      * Construct a new board and run a sequence of moves on it.
      * 
-     * @param players set of initial players
-     * @param history applied set of moves to get to a state
+     * @param players
+     *            set of initial players
+     * @param history
+     *            applied set of moves to get to a state
      */
     private Board(Player[] players, List<String> history) {
         this.history = new LinkedList<String>();
@@ -167,7 +170,8 @@ public class Board {
     /**
      * Get the number of walls a given player has remaining.
      * 
-     * @param player the ID of the player
+     * @param player
+     *            the ID of the player
      * @return number of walls the given player has left
      */
     public int remainingWalls(int player) {
@@ -195,7 +199,8 @@ public class Board {
     /**
      * Get the position of a player
      * 
-     * @param p player
+     * @param p
+     *            player
      * @return position of player
      */
     public Position positionOf(Player p) {
@@ -211,7 +216,8 @@ public class Board {
     /**
      * Get the position of the player with a specified ID
      * 
-     * @param id ID of the player in question
+     * @param id
+     *            ID of the player in question
      * @return position of the player
      */
     public Position positionOf(int id) {
@@ -221,20 +227,26 @@ public class Board {
     /**
      * Get the id of the player at the specified position
      * 
-     * @param p position whose contents are being checked
+     * @param p
+     *            position whose contents are being checked
      * @return id of the player at position p
      */
     public Integer playerAt(Position p) {
         Player pl = boxes[p.getRow()][p.getCol()].contents;
-        if (pl != null) { return pl.getID(); }
-        else { return null; }
+        if (pl != null) {
+            return pl.getID();
+        } else {
+            return null;
+        }
     }
     
     /**
      * Check if a wall exists from position p
      * 
-     * @param p origin square
-     * @param d direction to check
+     * @param p
+     *            origin square
+     * @param d
+     *            direction to check
      * @return if the wall exists
      */
     public boolean wallExists(Position p, Direction d) {
@@ -244,7 +256,8 @@ public class Board {
     /**
      * Get all reachable positions from a square
      * 
-     * @param p origin square
+     * @param p
+     *            origin square
      * @return list of reachable positions
      */
     public List<Position> neighboursOf(Position p) {
@@ -286,7 +299,8 @@ public class Board {
     /**
      * Get a list of valid move squares from a position
      * 
-     * @param pm origin square
+     * @param pm
+     *            origin square
      * @return reachable empty squares
      */
     public List<Position> validMoves(Position pm) {
@@ -304,13 +318,13 @@ public class Board {
             }
         }
         
-        for (Position p: adjacent) {
+        for (Position p : adjacent) {
             d = dirs.removeFirst();
             if (playerAt(p) != null) {
                 if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
                     moves.add(p.adjacentSquare(d));
                 } else {
-                    for (Position pos: jump(p, d)) {
+                    for (Position pos : jump(p, d)) {
                         moves.add(pos);
                     }
                 }
@@ -321,6 +335,13 @@ public class Board {
         return moves;
     }
     
+    /**
+     * Implement the special rules of player adjacency in quoridor.
+     * 
+     * @param p starting position
+     * @param d direction to jump
+     * @return list of possible moves
+     */
     private Position[] jump(Position p, Direction d) {
         if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
             Position[] rval = new Position[1];
@@ -328,9 +349,9 @@ public class Board {
             return rval;
         } else {
             LinkedList<Position> moves = new LinkedList<Position>();
-            for (Direction dir: Direction.values()) {
+            for (Direction dir : Direction.values()) {
                 if (!dir.equals(d) && !dir.equals(d.reverse())) {
-                    for (Position pos: jump(p, dir)) {
+                    for (Position pos : jump(p, dir)) {
                         moves.add(pos);
                     }
                 }
@@ -340,6 +361,12 @@ public class Board {
         }
     }
     
+    /**
+     * Check if a wall/move move is a valid move.
+     * 
+     * @param m position object to test
+     * @return if move is valid.
+     */
     private boolean isValidMove(Position m) {
         boolean validity = true;
         if (m.isWall() && players[current].getNumWalls() >= 0) {
@@ -381,6 +408,12 @@ public class Board {
         return validity;
     }
     
+    /**
+     * Check if a move is valid.
+     * 
+     * @param m move
+     * @return whether the move is valid.
+     */
     public boolean isValidMove(String m) {
         try {
             return isValidMove(new Position(m));
@@ -389,6 +422,14 @@ public class Board {
         }
     }
     
+    /**
+     * Create a copy of the board with the move applied. 
+     * 
+     * Returns null if the move is invalid.
+     * 
+     * @param move move to apply
+     * @return the resulting board (or null)
+     */
     public Board makeMove(String move) {
         if (move.equals("undo") && history.size() > 0) {
             String undo = history.remove(history.size() - 1);
@@ -416,6 +457,11 @@ public class Board {
         return null;
     }
     
+    /**
+     * Apply a move to the current board. Unprotected.
+     * 
+     * @param m move to apply
+     */
     private void move(Position m) {
         if (m.isWall()) {
             history.add(m.toString());
@@ -428,6 +474,13 @@ public class Board {
         current = (current + 1) % players.length;
     }
     
+    /**
+     * Move the current player to the specified position.
+     * 
+     * Unprotected.
+     * 
+     * @param m target box
+     */
     private void placeMove(Position m) {
         Player p = players[current];
         Position from = positionOf(p);
@@ -435,6 +488,13 @@ public class Board {
         boxes[m.getRow()][m.getCol()].setPlayer(p);
     }
     
+    /**
+     * Place a wall at the given position.
+     * 
+     * Unprotected.
+     * 
+     * @param position Position to place the wall in.
+     */
     private void placeWall(Position position) {
         // TODO: Make neater
         // The position specified is the northwest corner of the wall.
@@ -456,6 +516,11 @@ public class Board {
         }
     }
     
+    /**
+     * Remove a wall at a specified position. Unprotected.
+     * 
+     * @param position wall location
+     */
     private void removeWall(Position position) {
         int row = position.getRow();
         int col = position.getCol();

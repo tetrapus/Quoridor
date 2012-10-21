@@ -8,24 +8,53 @@ import java.util.Queue;
 import java.util.Random;
 
 
+/**
+ * Artificial Intelligence Player
+ * 
+ * The AI has 3 settings, easy, normal and hard.
+ * 
+ * @author Joey Tuong, Luke Pearson
+ *
+ */
 public class AI extends Player {
     
     private Difficulty dif;
     private int        depth;
     private Random     rand = new Random();
     
+    /**
+     * Get the difficulty setting of the AI.
+     * 
+     * @return difficulty of the AI
+     */
     public Difficulty getDif() {
         return dif;
     }
     
+    /**
+     * Set the difficulty of the AI.
+     * 
+     * @param dif difficulty of the AI
+     */
     public void setDif(Difficulty dif) {
         this.dif = dif;
     }
     
+    /**
+     * Create a new AI with the specified difficulty setting.
+     * 
+     * @param diff difficulty setting
+     */
     AI(Difficulty diff) {
         this.dif = diff;
     }
     
+    /**
+     * Gets the next move using the 'easy' algorithm (weighted by distance to end)
+     * 
+     * @param b input board
+     * @return move to apply
+     */
     public Position getMoveEasy(Board b) {
         Position p = getShortestPath(b, b.currentPlayer());
         if (p.parent != null) {
@@ -36,6 +65,13 @@ public class AI extends Player {
         return p;
     }
     
+    /**
+     * Shortest path algorithm from a position to the end of the board.
+     * 
+     * @param board input board
+     * @param pl player id
+     * @return child node of the generated tree of positions.
+     */
     public Position getShortestPath(Board board, int pl) {
         Queue<Position> q = new LinkedList<Position>();
         LinkedList<Position> visited = new LinkedList<Position>();
@@ -66,6 +102,14 @@ public class AI extends Player {
         return current;
     }
     
+    /**
+     * Check if a position p is at the winning end of the board from player pl's
+     * perspective.
+     * 
+     * @param p position to check
+     * @param pl player
+     * @return if position is at the correct end of the board
+     */
     public boolean finished(Position p, Integer pl) {
         if (pl == 1 && p.getRow() == 0) {
             return true;
@@ -77,6 +121,12 @@ public class AI extends Player {
         return false;
     }
     
+    /**
+     * Gets the next move using the 'normal' algorithm (weighted by relative distance to end)
+     * 
+     * @param board input board
+     * @return move to apply
+     */
     public Position getMoveNormal(Board board) {
         List<Integer> players = board.getPlayers();
         while (players.get(0) != this.getID()) {
@@ -97,6 +147,12 @@ public class AI extends Player {
         return maxMove;
     }
     
+    /**
+     * Gets the next move using the 'hard' algorithm (weighted by butchered alpha-beta)
+     * 
+     * @param board input board
+     * @return move to apply
+     */
     public Position getMoveHard(Board board) {
         List<Integer> players = board.getPlayers();
         while (players.get(0) != this.getID()) {
@@ -135,6 +191,13 @@ public class AI extends Player {
         return retval;
     }
     
+    /**
+     * Get a heuristic score for a given board state from a given player's perspective
+     * 
+     * @param state current board state
+     * @param player perspective player
+     * @return heuristic score of a board state
+     */
     public Integer score(Board state, int player) {
         Position move = getShortestPath(state, player);
         List<Integer> others = state.getPlayers();
@@ -149,6 +212,12 @@ public class AI extends Player {
         return (min - move.pathLength());
     }
     
+    /**
+     * Get all possible valid moves for the current player at a given state.
+     * 
+     * @param state board state
+     * @return list of valid moves
+     */
     public List<Position> generateMoves(Board state) {
         int player = state.currentPlayer();
         List<Position> moves = state.validMoves(state.positionOf(player));
@@ -174,6 +243,17 @@ public class AI extends Player {
         return moves;
     }
     
+    /**
+     * Alpha-beta algorithm
+     * 
+     * @param players List of players
+     * @param max Player to maximise
+     * @param state Current board state
+     * @param level Number of levels of recursion
+     * @param alpha alpha score
+     * @param beta beta score
+     * @return min-max score
+     */
     public Integer alphaBeta(List<Integer> players, Integer max, Board state,
             Integer level, Integer alpha, Integer beta) {
         Integer p = players.remove(0);
