@@ -19,7 +19,6 @@ public class Main {
 	    String[] AInames = {"GLaQuOS", "Deep Cyan", "Quoribot", "Digital Turk"};
 	     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Welcome to a java implementation of Quoridor");
-		System.out.println("THERE IS NOTHING WRONG WITH NOBLOCKJUMP");
 		System.out.println("Writen by Luke Pearson and Joseph Tuong");
 		String temp = "";
 		Integer size =0;
