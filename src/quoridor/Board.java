@@ -321,12 +321,8 @@ public class Board {
         for (Position p : adjacent) {
             d = dirs.removeFirst();
             if (playerAt(p) != null) {
-                if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
-                    moves.add(p.adjacentSquare(d));
-                } else {
-                    for (Position pos : jump(p, d)) {
-                        moves.add(pos);
-                    }
+                for (Position pos: jump(p, d, false)) {
+                    moves.add(pos);
                 }
             } else {
                 moves.add(p);
@@ -342,16 +338,19 @@ public class Board {
      * @param d direction to jump
      * @return list of possible moves
      */
-    private Position[] jump(Position p, Direction d) {
+    private Position[] jump(Position p, Direction d, boolean giveUp) {
         if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
             Position[] rval = new Position[1];
             rval[0] = p.adjacentSquare(d);
+            return rval;
+        } else if (giveUp) {
+            Position[] rval = new Position[0];
             return rval;
         } else {
             LinkedList<Position> moves = new LinkedList<Position>();
             for (Direction dir : Direction.values()) {
                 if (!dir.equals(d) && !dir.equals(d.reverse())) {
-                    for (Position pos : jump(p, dir)) {
+                    for (Position pos : jump(p, dir, true)) {
                         moves.add(pos);
                     }
                 }
