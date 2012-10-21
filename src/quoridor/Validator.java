@@ -31,6 +31,9 @@ public class Validator {
      */
     public boolean check(List<String> moves) {
         for (String move : moves) {
+            if (move.length() == 3) {
+                ar[board.currentPlayer() - 1].useWall();
+            }
             if (board.isValidMove(move)) {
                 board = board.makeMove(move);
             } else {

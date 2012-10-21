@@ -168,7 +168,7 @@ public class Position {
     /**
      * Traverse upwards through a position path and return the length.
      * 
-     * @return
+     * @return length of position path
      */
     public int pathLength() {
         if (parent == null) {

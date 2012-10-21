@@ -93,6 +93,13 @@ public abstract class Player {
     }
     
     /**
+     * Use a wall.
+     */
+    public final void useWall() {
+        walls--;
+    }
+    
+    /**
      * Template method to get the player's next move given a certain game state.
      * 
      * @param g Game object
@@ -106,7 +113,7 @@ public abstract class Player {
         }
         
         if (move.length() == 3) {
-            this.walls--;
+            useWall();
         }
         if (move == "undo" && g.getBoard().lastMove().length() == 3) {
             this.walls++;

@@ -157,7 +157,7 @@ public class Board {
     /**
      * Get a list of the IDs of all players in the game.
      * 
-     * @return
+     * @return list of player ids
      */
     public List<Integer> getPlayers() {
         List<Integer> ps = new LinkedList<Integer>();
