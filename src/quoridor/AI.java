@@ -5,12 +5,14 @@ package quoridor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 
 public class AI extends Player {
     
     private Difficulty dif;
     private int        depth;
+    private Random     rand = new Random();
     
     public Difficulty getDif() {
         return dif;
@@ -100,7 +102,6 @@ public class AI extends Player {
         while (players.get(0) != this.getID()) {
             players.add(players.remove(0));
         }
-        //players.add(players.remove(0));
         
         depth = 1;
         
@@ -111,7 +112,7 @@ public class AI extends Player {
         for (Position current : moves) {
             int temp = alphaBeta(players, this.getID(),
                     board.makeMove(current.toString()), 0, -1000000, +1000000);
-            if (temp > maxscore) {
+            if (temp >= maxscore) {
                 maxscore = temp;
                 maxMove = current;
                 break;
@@ -152,10 +153,12 @@ public class AI extends Player {
         int player = state.currentPlayer();
         List<Position> moves = state.validMoves(state.positionOf(player));
         if (state.remainingWalls(player) > 0) {
-            for (char i='1'; i<'9'; i++) {
-                for (char j='a'; j<'i'; j++) {
-                    Position horstate = new Position(String.valueOf(j)+String.valueOf(i)+"h");
-                    Position verstate = new Position(String.valueOf(j)+String.valueOf(i)+"v");
+            for (char i = '1'; i < '9'; i++) {
+                for (char j = 'a'; j < 'i'; j++) {
+                    Position horstate = new Position(String.valueOf(j)
+                            + String.valueOf(i) + "h");
+                    Position verstate = new Position(String.valueOf(j)
+                            + String.valueOf(i) + "v");
                     if (state.isValidMove(horstate.toString())) {
                         moves.add(horstate);
                     }
@@ -164,6 +167,9 @@ public class AI extends Player {
                     }
                 }
             }
+        }
+        if (moves.size() > 2) {
+            moves.remove(rand.nextInt(moves.size()));
         }
         return moves;
     }
@@ -180,7 +186,7 @@ public class AI extends Player {
             List<Position> moves = generateMoves(state);
             if (p.equals(max)) {
                 for (Position next : moves) {
-                    //System.out.println(next);
+                    // System.out.println(next);
                     score = alphaBeta(players, max,
                             state.makeMove(next.toString()), level + 1, alpha,
                             beta);

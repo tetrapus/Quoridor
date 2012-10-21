@@ -16,13 +16,16 @@ import quoridor.Position.Wall;
  */
 public class Board {
     
-    private final int      walls   = 20;
-    private final int      size    = 9;
-    private int            current = 0;
-    private Box[][]        boxes;
-    private Player[]       players;
-    private List<String>   history;
+    private final int    walls   = 20;
+    private final int    size    = 9;
+    private int          current = 0;
+    private Box[][]      boxes;
+    private Player[]     players;
+    private List<String> history;
     
+    /**
+     * Construct the graph of boxes.
+     */
     private void initBoxGraph() {
         // Make the boxes
         boxes = new Box[size][size];
@@ -54,13 +57,19 @@ public class Board {
         }
     }
     
+    /**
+     * Construct a new board object initialised with a set of players
+     * 
+     * @param players an array of 2 or 4 initial players
+     */
     public Board(Player[] players) {
         this.history = new LinkedList<String>();
         this.players = players;
         initBoxGraph();
         Direction[] defaults = { Direction.UP, Direction.DOWN, Direction.LEFT,
                 Direction.RIGHT };
-        Position[] defaultpos = { new Position(8, 4), new Position(0, 4), new Position(4, 8), new Position(4, 0)};
+        Position[] defaultpos = { new Position(8, 4), new Position(0, 4),
+                new Position(4, 8), new Position(4, 0) };
         if (players.length != 2 && players.length != 4) { throw new IllegalArgumentException(
                 "Only 2 or 4 players are supported."); }
         for (int i = 0; i < players.length; i++) {
@@ -70,25 +79,36 @@ public class Board {
         }
     }
     
+    /**
+     * Construct a new board and run a sequence of moves on it.
+     * 
+     * @param players set of initial players
+     * @param history applied set of moves to get to a state
+     */
     private Board(Player[] players, List<String> history) {
         this.history = new LinkedList<String>();
         this.players = players;
         initBoxGraph();
-        Position[] defaultpos = { new Position(8, 4), new Position(0, 4), new Position(4, 8), new Position(4, 0)};
+        Position[] defaultpos = { new Position(8, 4), new Position(0, 4),
+                new Position(4, 8), new Position(4, 0) };
         for (int i = 0; i < players.length; i++) {
             Position m = defaultpos[i];
             boxes[m.getRow()][m.getCol()].setPlayer(players[i]);
         }
         for (String move : history) {
-            Position p = new Position(move.length() == 3 ? move : move.split(" ")[1]); 
+            Position p = new Position(move.length() == 3 ? move
+                    : move.split(" ")[1]);
             this.move(p);
         }
     }
     
+    /**
+     * Print the current state of the board.
+     */
     public void printBoard() {
-        for (Player current : players){
-            System.out.println("Player " + current.getID().toString() + " (" + 
-            current.getName() + ") has " 
+        for (Player current : players) {
+            System.out.println("Player " + current.getID().toString() + " ("
+                    + current.getName() + ") has "
                     + current.getNumWalls().toString() + " walls remaining.");
         }
         System.out.println(" [4m a b c d e f g h i [24m");
@@ -111,7 +131,8 @@ public class Board {
                 } else {
                     
                     cellname = "[4m" + cellname;
-                    if (cell.getPlayer() != null && cell.getPlayer().getID() == currentPlayer()) {
+                    if (cell.getPlayer() != null
+                            && cell.getPlayer().getID() == currentPlayer()) {
                         cellname += "[4m";
                     }
                 }
@@ -126,10 +147,15 @@ public class Board {
             }
             System.out.println("[24m");
         }
-        System.out.println("It is " + players[current].getName() +"'s turn.");
+        System.out.println("It is " + players[current].getName() + "'s turn.");
         
     }
     
+    /**
+     * Get a list of the IDs of all players in the game.
+     * 
+     * @return
+     */
     public List<Integer> getPlayers() {
         List<Integer> ps = new LinkedList<Integer>();
         for (Player p : players) {
@@ -138,18 +164,40 @@ public class Board {
         return ps;
     }
     
+    /**
+     * Get the number of walls a given player has remaining.
+     * 
+     * @param player the ID of the player
+     * @return number of walls the given player has left
+     */
     public int remainingWalls(int player) {
-        return players[player-1].getNumWalls();
+        return players[player - 1].getNumWalls();
     }
     
+    /**
+     * Get the current player.
+     * 
+     * @return whose turn it is
+     */
     public int currentPlayer() {
         return players[current].getID();
     }
     
+    /**
+     * Get the last move taken.
+     * 
+     * @return the last move taken
+     */
     public String lastMove() {
         return history.get(history.size() - 1);
     }
     
+    /**
+     * Get the position of a player
+     * 
+     * @param p player
+     * @return position of player
+     */
     public Position positionOf(Player p) {
         for (int i = 0; i < boxes.length; i++) {
             for (int j = 0; j < boxes.length; j++) {
@@ -160,18 +208,45 @@ public class Board {
         return null;
     }
     
+    /**
+     * Get the position of the player with a specified ID
+     * 
+     * @param id ID of the player in question
+     * @return position of the player
+     */
     public Position positionOf(int id) {
-        return positionOf(players[id-1]);
+        return positionOf(players[id - 1]);
     }
     
+    /**
+     * Get the id of the player at the specified position
+     * 
+     * @param p position whose contents are being checked
+     * @return id of the player at position p
+     */
     public Integer playerAt(Position p) {
-        return boxes[p.getRow()][p.getCol()].contents.getID();
+        Player pl = boxes[p.getRow()][p.getCol()].contents;
+        if (pl != null) { return pl.getID(); }
+        else { return null; }
     }
     
+    /**
+     * Check if a wall exists from position p
+     * 
+     * @param p origin square
+     * @param d direction to check
+     * @return if the wall exists
+     */
     public boolean wallExists(Position p, Direction d) {
         return boxes[p.getRow()][p.getCol()].getNeighbour(d) == null;
     }
     
+    /**
+     * Get all reachable positions from a square
+     * 
+     * @param p origin square
+     * @return list of reachable positions
+     */
     public List<Position> neighboursOf(Position p) {
         List<Position> neighbours = new LinkedList<Position>();
         for (Direction d : Direction.values()) {
@@ -183,6 +258,11 @@ public class Board {
         return neighbours;
     }
     
+    /**
+     * Flood the board
+     * 
+     * @return if the board is floodable.
+     */
     public boolean flood() {
         LinkedList<Box> visited = new LinkedList<Box>();
         Queue<Box> q = new LinkedList<Box>();
@@ -203,33 +283,61 @@ public class Board {
         return visited.size() == size * size;
     }
     
+    /**
+     * Get a list of valid move squares from a position
+     * 
+     * @param pm origin square
+     * @return reachable empty squares
+     */
     public List<Position> validMoves(Position pm) {
+        LinkedList<Position> adjacent = new LinkedList<Position>();
         LinkedList<Position> moves = new LinkedList<Position>();
-        LinkedList<Box> adjacent = new LinkedList<Box>();
-        LinkedList<Box> visited = new LinkedList<Box>();
-        Queue<Box> q = new LinkedList<Box>();
-        q.add(boxes[pm.getRow()][pm.getCol()]);
-        visited.add(boxes[pm.getRow()][pm.getCol()]);
-        Box current;
+        LinkedList<Direction> dirs = new LinkedList<Direction>();
+        Box current = boxes[pm.getRow()][pm.getCol()];
         Box neighbour;
-        while (!q.isEmpty()) {
-            current = q.remove();
-            for (Direction dir : Direction.values()) {
-                neighbour = current.getNeighbour(dir);
-                if (neighbour != null && !visited.contains(neighbour)) {
-                    if (neighbour.getPlayer() == null) {
-                        adjacent.add(neighbour);
-                    } else {
-                        q.add(neighbour);
-                    }
-                    visited.add(neighbour);
-                }
+        Direction d;
+        for (Direction dir : Direction.values()) {
+            neighbour = current.getNeighbour(dir);
+            if (neighbour != null) {
+                adjacent.add(neighbour.getPosition());
+                dirs.add(dir);
             }
         }
-        for (Box b : adjacent) {
-            moves.add(b.getPosition());
+        
+        for (Position p: adjacent) {
+            d = dirs.removeFirst();
+            if (playerAt(p) != null) {
+                if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
+                    moves.add(p.adjacentSquare(d));
+                } else {
+                    for (Position pos: jump(p, d)) {
+                        moves.add(pos);
+                    }
+                }
+            } else {
+                moves.add(p);
+            }
         }
         return moves;
+    }
+    
+    private Position[] jump(Position p, Direction d) {
+        if (!wallExists(p, d) && playerAt(p.adjacentSquare(d)) == null) {
+            Position[] rval = new Position[1];
+            rval[0] = p.adjacentSquare(d);
+            return rval;
+        } else {
+            LinkedList<Position> moves = new LinkedList<Position>();
+            for (Direction dir: Direction.values()) {
+                if (!dir.equals(d) && !dir.equals(d.reverse())) {
+                    for (Position pos: jump(p, dir)) {
+                        moves.add(pos);
+                    }
+                }
+            }
+            Position rval[] = new Position[moves.size()];
+            return moves.toArray(rval);
+        }
     }
     
     private boolean isValidMove(Position m) {
@@ -313,7 +421,8 @@ public class Board {
             history.add(m.toString());
             placeWall(m);
         } else {
-            history.add(positionOf(players[current]).toString() + " " + m.toString());
+            history.add(positionOf(players[current]).toString() + " "
+                    + m.toString());
             placeMove(m);
         }
         current = (current + 1) % players.length;

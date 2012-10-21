@@ -68,6 +68,18 @@ public class Position {
         this.isWall = false;
     }
 
+    public Position adjacentSquare(Direction d) {
+        int newrow = this.row;
+        int newcol = this.col;
+        
+        if (d == Direction.DOWN) newrow++;
+        else if (d == Direction.UP) newrow--;
+        else if (d == Direction.LEFT) newcol--;
+        else if (d == Direction.RIGHT) newcol++;
+        
+        return new Position(newrow, newcol);
+    }
+    
     public boolean isValidMoveString(String move) {
         boolean validity = (move.length() >= 2);
         validity = validity && move.charAt(0) >= 'a' && move.charAt(1) <= 'i';

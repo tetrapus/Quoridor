@@ -11,5 +11,17 @@ public enum Direction {
     public int index() { 
         return index; 
     }
+    
+    public Direction reverse() {
+        if (this == Direction.DOWN) {
+            return Direction.UP;
+        } else if (this == Direction.UP) {
+            return Direction.DOWN;
+        } else if (this == Direction.LEFT) {
+            return Direction.RIGHT;
+        } else {
+            return Direction.LEFT;
+        }
+    }
 
 }
